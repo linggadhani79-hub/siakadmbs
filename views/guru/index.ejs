@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Guru &amp; Musyrif</h3><p class="muted"><%= guru.length %> pegawai</p></div>
+  <a href="/guru/tambah" class="btn btn-sm">+ Tambah</a>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>NIP</th><th>Nama</th><th>JK</th><th>Jabatan</th><th>No. HP</th><th></th></tr></thead>
+    <tbody>
+      <% if (guru.length===0){ %><tr><td colspan="6" class="empty">Belum ada data.</td></tr><% } %>
+      <% guru.forEach(g => { %>
+        <tr>
+          <td><%= g.nip || '-' %></td>
+          <td><%= g.nama %></td>
+          <td><%= g.jk || '-' %></td>
+          <td><%= g.jabatan || '-' %></td>
+          <td><%= g.no_hp || '-' %></td>
+          <td class="actions">
+            <a href="/guru/<%= g.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+            <form method="post" action="/guru/<%= g.id %>?_method=DELETE" onsubmit="return confirm('Hapus guru ini?')">
+              <button class="btn btn-sm btn-danger">Hapus</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

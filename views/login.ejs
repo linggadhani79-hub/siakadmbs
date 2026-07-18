@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk · SIAKAD MBS Poncowati</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand">
+      <div class="logo">M</div>
+      <h1>SIAKAD MBS Poncowati</h1>
+      <div class="sub">Sistem Informasi Akademik Sekolah &amp; Pondok</div>
+    </div>
+    <% if (error) { %>
+      <div class="flash flash-error"><%= error %></div>
+    <% } %>
+    <form method="post" action="/login">
+      <div class="form-row">
+        <label>Username</label>
+        <input type="text" name="username" autofocus required>
+      </div>
+      <div class="form-row">
+        <label>Password</label>
+        <input type="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-block">Masuk</button>
+    </form>
+    <div class="hint">
+      <strong>Akun demo:</strong><br>
+      <code>admin</code> / admin123 &nbsp;·&nbsp; <code>guru</code> / guru123<br>
+      <code>musyrif</code> / musyrif123 &nbsp;·&nbsp; <code>siswa</code> / siswa123
+    </div>
+  </div>
+</div>
+</body>
+</html>

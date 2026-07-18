@@ -1,0 +1,32 @@
+{
+  "name": "siakad-mbs-poncowati",
+  "version": "1.0.0",
+  "description": "Sistem Informasi Akademik (SIAKAD) MBS Poncowati - tata kelola sekolah SMP/SMA terintegrasi pondok pesantren: jurnal mengajar, tahfidz Quran, dan pembagian kamar asrama",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node src/seed.js"
+  },
+  "keywords": [
+    "siakad",
+    "pondok",
+    "tahfidz",
+    "sekolah",
+    "pesantren"
+  ],
+  "author": "MBS Poncowati",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "method-override": "^3.0.0"
+  }
+}

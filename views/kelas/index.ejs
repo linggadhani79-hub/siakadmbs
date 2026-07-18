@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Kelas / Rombel</h3><p class="muted"><%= kelas.length %> rombongan belajar</p></div>
+  <a href="/kelas/tambah" class="btn btn-sm">+ Tambah</a>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Nama</th><th>Jenjang</th><th>Tingkat</th><th>Wali Kelas</th><th>Jml Siswa</th><th></th></tr></thead>
+    <tbody>
+      <% if (kelas.length===0){ %><tr><td colspan="6" class="empty">Belum ada data.</td></tr><% } %>
+      <% kelas.forEach(k => { %>
+        <tr>
+          <td><span class="tag tag-blue"><%= k.nama %></span></td>
+          <td><%= k.jenjang %></td>
+          <td><%= k.tingkat %></td>
+          <td><%= k.wali || '-' %></td>
+          <td><%= k.jml %></td>
+          <td class="actions">
+            <a href="/kelas/<%= k.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+            <form method="post" action="/kelas/<%= k.id %>?_method=DELETE" onsubmit="return confirm('Hapus kelas ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

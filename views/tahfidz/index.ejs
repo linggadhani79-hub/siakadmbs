@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Manajemen Tahfidz Al-Quran</h3><p class="muted">Pencatatan setoran hafalan santri</p></div>
+  <div class="filters">
+    <a href="/tahfidz/rekap" class="btn btn-sm btn-outline">📊 Rekap Capaian</a>
+    <% if (canManage) { %><a href="/tahfidz/tambah" class="btn btn-sm">+ Setoran</a><% } %>
+  </div>
+</div>
+
+<div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+  <div class="stat"><div class="ic">📖</div><div><div class="n"><%= ringkasan.totalSetoran %></div><div class="l">Total Setoran</div></div></div>
+  <div class="stat"><div class="ic">➕</div><div><div class="n"><%= ringkasan.ziyadah %></div><div class="l">Ziyadah</div></div></div>
+  <div class="stat"><div class="ic">🔁</div><div><div class="n"><%= ringkasan.murojaah %></div><div class="l">Murojaah</div></div></div>
+  <div class="stat"><div class="ic">⭐</div><div><div class="n"><%= ringkasan.mumtaz %></div><div class="l">Nilai Mumtaz</div></div></div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Riwayat Setoran</h3>
+    <% if (currentUser.role !== 'siswa') { %>
+    <form method="get" class="filters" style="display:flex; gap:8px;">
+      <select name="kelas_id" onchange="this.form.submit()"><option value="">Semua Kelas</option><% kelas.forEach(k => { %><option value="<%= k.id %>" <%= String(filter.kelas_id)===String(k.id)?'selected':'' %>><%= k.nama %></option><% }) %></select>
+      <select name="jenis" onchange="this.form.submit()"><option value="">Semua Jenis</option><option value="Ziyadah" <%= filter.jenis==='Ziyadah'?'selected':'' %>>Ziyadah</option><option value="Murojaah" <%= filter.jenis==='Murojaah'?'selected':'' %>>Murojaah</option></select>
+      <select name="nilai" onchange="this.form.submit()"><option value="">Semua Nilai</option><% ['Mumtaz','Jayyid Jiddan','Jayyid','Maqbul','Mengulang'].forEach(n => { %><option value="<%= n %>" <%= filter.nilai===n?'selected':'' %>><%= n %></option><% }) %></select>
+    </form>
+    <% } %>
+  </div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Tanggal</th><th>Santri</th><th>Kelas</th><th>Jenis</th><th>Surah / Ayat</th><th>Juz</th><th>Nilai</th><th>Musyrif</th><% if (canManage) { %><th></th><% } %></tr></thead>
+      <tbody>
+        <% if (tahfidz.length===0){ %><tr><td colspan="9" class="empty">Belum ada setoran.</td></tr><% } %>
+        <% tahfidz.forEach(t => {
+             const nilaiTag = {'Mumtaz':'tag-gold','Jayyid Jiddan':'tag-green','Jayyid':'tag-green','Maqbul':'tag-blue','Mengulang':'tag-red'}[t.nilai]||'tag-gray'; %>
+          <tr>
+            <td><%= t.tanggal %></td>
+            <td><a href="/siswa/<%= t.siswa_id %>"><%= t.siswa %></a></td>
+            <td><%= t.kelas || '-' %></td>
+            <td><span class="tag <%= t.jenis==='Ziyadah'?'tag-green':'tag-gold' %>"><%= t.jenis %></span></td>
+            <td><strong><%= t.surah %></strong> : <%= t.ayat_dari %>-<%= t.ayat_sampai %></td>
+            <td><%= t.juz || '-' %></td>
+            <td><span class="tag <%= nilaiTag %>"><%= t.nilai || '-' %></span></td>
+            <td><%= t.musyrif || '-' %></td>
+            <% if (canManage) { %>
+              <td class="actions">
+                <a href="/tahfidz/<%= t.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+                <form method="post" action="/tahfidz/<%= t.id %>?_method=DELETE" onsubmit="return confirm('Hapus setoran ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+              </td>
+            <% } %>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<%- include('../partials/footer') %>

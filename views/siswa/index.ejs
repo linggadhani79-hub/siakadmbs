@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div>
+    <h3 style="color:var(--green-dark); font-size:18px;">Data Santri / Siswa</h3>
+    <p class="muted"><%= siswa.length %> santri aktif</p>
+  </div>
+  <div class="filters">
+    <form method="get" style="display:flex; gap:8px;">
+      <input type="text" name="q" placeholder="Cari nama / NIS..." value="<%= filter.q || '' %>">
+      <select name="kelas_id" onchange="this.form.submit()">
+        <option value="">Semua Kelas</option>
+        <% kelas.forEach(k => { %>
+          <option value="<%= k.id %>" <%= String(filter.kelas_id)===String(k.id)?'selected':'' %>><%= k.nama %> (<%= k.jenjang %>)</option>
+        <% }) %>
+      </select>
+      <button class="btn btn-outline btn-sm">Cari</button>
+    </form>
+    <% if (['admin','guru','musyrif'].includes(currentUser.role)) { %>
+      <a href="/siswa/tambah" class="btn btn-sm">+ Tambah</a>
+    <% } %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p0">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>NIS</th><th>Nama</th><th>JK</th><th>Kelas</th><th>Kamar</th><th></th></tr>
+        </thead>
+        <tbody>
+          <% if (siswa.length === 0) { %>
+            <tr><td colspan="6" class="empty">Tidak ada data siswa.</td></tr>
+          <% } %>
+          <% siswa.forEach(s => { %>
+            <tr>
+              <td><%= s.nis || '-' %></td>
+              <td><a href="/siswa/<%= s.id %>"><%= s.nama %></a></td>
+              <td><%= s.jk %></td>
+              <td><%= s.kelas_nama ? `<span class="tag tag-blue">${s.kelas_nama}</span>` : '<span class="muted">-</span>' %></td>
+              <td><%= s.kamar_nama || '<span class="muted">-</span>' %></td>
+              <td class="actions">
+                <a href="/siswa/<%= s.id %>" class="btn btn-sm btn-muted">Detail</a>
+                <% if (['admin','guru','musyrif'].includes(currentUser.role)) { %>
+                  <a href="/siswa/<%= s.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+                <% } %>
+                <% if (currentUser.role==='admin') { %>
+                  <form method="post" action="/siswa/<%= s.id %>?_method=DELETE" onsubmit="return confirm('Hapus data siswa ini?')">
+                    <button class="btn btn-sm btn-danger">Hapus</button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

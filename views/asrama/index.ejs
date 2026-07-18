@@ -1,0 +1,69 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Asrama &amp; Kamar</h3><p class="muted">Kelola gedung asrama dan kamar santri</p></div>
+  <button class="btn btn-sm" onclick="document.getElementById('addAsrama').style.display='block'">+ Asrama</button>
+</div>
+
+<div id="addAsrama" class="card" style="display:none; max-width:640px;">
+  <div class="card-head"><h3>Tambah Asrama</h3></div>
+  <div class="card-body">
+    <form method="post" action="/asrama">
+      <div class="form-grid">
+        <div class="form-row"><label>Nama Asrama *</label><input type="text" name="nama" required></div>
+        <div class="form-row"><label>Gender *</label><select name="gender"><option value="Putra">Putra</option><option value="Putri">Putri</option></select></div>
+      </div>
+      <div class="form-row"><label>Pembina / Musyrif</label>
+        <select name="pembina_id"><option value="">- Belum ditentukan -</option><% guru.forEach(g => { %><option value="<%= g.id %>"><%= g.nama %></option><% }) %></select>
+      </div>
+      <div class="form-actions"><button class="btn">Simpan</button><button type="button" class="btn btn-muted" onclick="document.getElementById('addAsrama').style.display='none'">Batal</button></div>
+    </form>
+  </div>
+</div>
+
+<% if (asrama.length===0){ %><div class="card"><div class="empty">Belum ada asrama.</div></div><% } %>
+
+<% asrama.forEach(a => { %>
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h3><%= a.nama %> <span class="tag <%= a.gender==='Putra'?'tag-blue':'tag-red' %>"><%= a.gender %></span></h3>
+        <p class="muted">Pembina: <%= a.pembina || '-' %> · <%= a.jml_kamar %> kamar</p>
+      </div>
+      <div class="actions">
+        <button class="btn btn-sm btn-outline" onclick="document.getElementById('k<%= a.id %>').style.display='block'">+ Kamar</button>
+        <form method="post" action="/asrama/<%= a.id %>?_method=DELETE" onsubmit="return confirm('Hapus asrama beserta kamarnya?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+      </div>
+    </div>
+    <div class="card-body">
+      <div id="k<%= a.id %>" style="display:none; margin-bottom:16px; padding:14px; background:var(--green-light); border-radius:8px;">
+        <form method="post" action="/asrama/<%= a.id %>/kamar" style="display:flex; gap:10px; align-items:end;">
+          <div style="flex:2;"><label>Nama Kamar</label><input type="text" name="nama" placeholder="mis. Kamar A3" required></div>
+          <div style="flex:1;"><label>Kapasitas</label><input type="number" name="kapasitas" value="4" min="1"></div>
+          <button class="btn btn-sm">Tambah</button>
+        </form>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kamar</th><th>Kapasitas</th><th>Terisi</th><th>Sisa</th><th></th></tr></thead>
+          <tbody>
+            <% (kamarByAsrama[a.id]||[]).forEach(k => { %>
+              <tr>
+                <td><%= k.nama %></td>
+                <td><%= k.kapasitas %></td>
+                <td><%= k.terisi %></td>
+                <td><span class="tag <%= (k.kapasitas-k.terisi)>0?'tag-green':'tag-red' %>"><%= k.kapasitas - k.terisi %></span></td>
+                <td class="actions">
+                  <form method="post" action="/asrama/kamar/<%= k.id %>?_method=DELETE" onsubmit="return confirm('Hapus kamar ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+                </td>
+              </tr>
+            <% }) %>
+            <% if ((kamarByAsrama[a.id]||[]).length===0){ %><tr><td colspan="5" class="empty">Belum ada kamar.</td></tr><% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% }) %>
+
+<%- include('../partials/footer') %>

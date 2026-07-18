@@ -1,0 +1,69 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <h3 style="color:var(--green-dark); font-size:18px;">Profil Santri</h3>
+  <a href="/siswa" class="btn btn-sm btn-muted">← Kembali</a>
+</div>
+
+<div style="display:grid; grid-template-columns: 320px 1fr; gap:22px;">
+  <div class="card">
+    <div class="card-body">
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="width:72px;height:72px;border-radius:50%;background:var(--green-light);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 10px;">🧑‍🎓</div>
+        <div style="font-size:18px;font-weight:700;color:var(--green-dark);"><%= siswa.nama %></div>
+        <div class="muted">NIS: <%= siswa.nis || '-' %></div>
+      </div>
+      <table>
+        <tbody>
+          <tr><td class="muted">Jenis Kelamin</td><td><%= siswa.jk==='L'?'Laki-laki':'Perempuan' %></td></tr>
+          <tr><td class="muted">TTL</td><td><%= siswa.tempat_lahir || '-' %><%= siswa.tgl_lahir ? ', '+siswa.tgl_lahir : '' %></td></tr>
+          <tr><td class="muted">Kelas</td><td><%= siswa.kelas_nama || '-' %></td></tr>
+          <tr><td class="muted">Asrama</td><td><%= siswa.asrama_nama || '-' %></td></tr>
+          <tr><td class="muted">Kamar</td><td><%= siswa.kamar_nama || '-' %></td></tr>
+          <tr><td class="muted">Wali</td><td><%= siswa.wali_ortu || '-' %></td></tr>
+          <tr><td class="muted">No. HP</td><td><%= siswa.no_hp || '-' %></td></tr>
+          <tr><td class="muted">Alamat</td><td><%= siswa.alamat || '-' %></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="stat-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="stat"><div class="ic">📖</div><div><div class="n"><%= ziyadah %></div><div class="l">Sesi Ziyadah</div></div></div>
+      <div class="stat"><div class="ic">🏆</div><div><div class="n"><%= juzTertinggi ? 'Juz '+juzTertinggi : '-' %></div><div class="l">Capaian Tertinggi</div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h3>📖 Riwayat Tahfidz</h3>
+        <% if (['admin','guru','musyrif'].includes(currentUser.role)) { %>
+          <a href="/tahfidz/tambah?siswa_id=<%= siswa.id %>" class="btn btn-sm btn-outline">+ Setoran</a>
+        <% } %>
+      </div>
+      <div class="card-body p0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Tanggal</th><th>Jenis</th><th>Surah / Ayat</th><th>Juz</th><th>Nilai</th><th>Musyrif</th></tr></thead>
+            <tbody>
+              <% if (tahfidz.length === 0) { %>
+                <tr><td colspan="6" class="empty">Belum ada riwayat setoran.</td></tr>
+              <% } %>
+              <% tahfidz.forEach(t => { %>
+                <tr>
+                  <td><%= t.tanggal %></td>
+                  <td><span class="tag <%= t.jenis==='Ziyadah'?'tag-green':'tag-gold' %>"><%= t.jenis %></span></td>
+                  <td><%= t.surah %> : <%= t.ayat_dari %>-<%= t.ayat_sampai %></td>
+                  <td><%= t.juz || '-' %></td>
+                  <td><%= t.nilai || '-' %></td>
+                  <td><%= t.musyrif || '-' %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

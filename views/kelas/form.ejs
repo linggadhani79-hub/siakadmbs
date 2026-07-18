@@ -1,0 +1,24 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:640px;">
+  <div class="card-head"><h3><%= title %></h3></div>
+  <div class="card-body">
+    <form method="post" action="<%= action %>">
+      <div class="form-grid">
+        <div class="form-row"><label>Nama Kelas *</label><input type="text" name="nama" value="<%= kelas.nama || '' %>" placeholder="mis. 7A" required></div>
+        <div class="form-row"><label>Jenjang *</label>
+          <select name="jenjang" required><option value="SMP" <%= kelas.jenjang==='SMP'?'selected':'' %>>SMP</option><option value="SMA" <%= kelas.jenjang==='SMA'?'selected':'' %>>SMA</option></select>
+        </div>
+        <div class="form-row"><label>Tingkat *</label><input type="number" name="tingkat" value="<%= kelas.tingkat || '' %>" min="7" max="12" required></div>
+        <div class="form-row"><label>Wali Kelas</label>
+          <select name="wali_id"><option value="">- Belum ditentukan -</option>
+            <% guru.forEach(g => { %><option value="<%= g.id %>" <%= String(kelas.wali_id)===String(g.id)?'selected':'' %>><%= g.nama %></option><% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions"><button class="btn">Simpan</button><a href="/kelas" class="btn btn-muted">Batal</a></div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

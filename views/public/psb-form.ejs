@@ -1,0 +1,87 @@
+<%- include('partials/head', { heroNav: false }) %>
+
+<section class="page-top">
+  <div class="container">
+    <h1>Penerimaan Santri Baru</h1>
+    <p>Isi formulir di bawah ini untuk mendaftar sebagai santri MBS Poncowati (SMP / SMA)</p>
+  </div>
+</section>
+
+<div class="form-wrap">
+  <div class="form-card">
+    <div class="steps">
+      <div class="st"><div class="num">1</div>Isi Formulir</div>
+      <div class="st"><div class="num">2</div>Dapat No. Registrasi</div>
+      <div class="st"><div class="num">3</div>Verifikasi Sekolah</div>
+    </div>
+
+    <% if (error) { %><div class="alert alert-err"><%= error %></div><% } %>
+
+    <form method="post" action="/psb">
+      <div class="two">
+        <div class="fg">
+          <label>Nama Lengkap Calon Santri *</label>
+          <input type="text" name="nama" value="<%= form.nama || '' %>" required>
+        </div>
+        <div class="fg">
+          <label>Jenis Kelamin *</label>
+          <select name="jk" required>
+            <option value="">- Pilih -</option>
+            <option value="L" <%= form.jk==='L'?'selected':'' %>>Laki-laki</option>
+            <option value="P" <%= form.jk==='P'?'selected':'' %>>Perempuan</option>
+          </select>
+        </div>
+      </div>
+      <div class="two">
+        <div class="fg">
+          <label>Jenjang yang Dituju *</label>
+          <select name="jenjang" required>
+            <option value="">- Pilih -</option>
+            <option value="SMP" <%= form.jenjang==='SMP'?'selected':'' %>>SMP MBS Poncowati</option>
+            <option value="SMA" <%= form.jenjang==='SMA'?'selected':'' %>>SMA MBS Poncowati</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>Asal Sekolah</label>
+          <input type="text" name="asal_sekolah" value="<%= form.asal_sekolah || '' %>" placeholder="mis. SDN 1 Poncowati">
+        </div>
+      </div>
+      <div class="two">
+        <div class="fg">
+          <label>Tempat Lahir</label>
+          <input type="text" name="tempat_lahir" value="<%= form.tempat_lahir || '' %>">
+        </div>
+        <div class="fg">
+          <label>Tanggal Lahir</label>
+          <input type="date" name="tgl_lahir" value="<%= form.tgl_lahir || '' %>">
+        </div>
+      </div>
+      <div class="fg">
+        <label>Alamat</label>
+        <textarea name="alamat"><%= form.alamat || '' %></textarea>
+      </div>
+      <div class="two">
+        <div class="fg">
+          <label>Nama Orang Tua / Wali</label>
+          <input type="text" name="nama_ortu" value="<%= form.nama_ortu || '' %>">
+        </div>
+        <div class="fg">
+          <label>No. HP / WhatsApp</label>
+          <input type="text" name="no_hp" value="<%= form.no_hp || '' %>" placeholder="08xxxxxxxxxx">
+        </div>
+      </div>
+      <div class="fg">
+        <label>Email</label>
+        <input type="email" name="email" value="<%= form.email || '' %>">
+      </div>
+      <div class="fg">
+        <label>Catatan / Pesan (opsional)</label>
+        <textarea name="catatan"><%= form.catatan || '' %></textarea>
+      </div>
+      <button type="submit" class="btn btn-green" style="width:100%; justify-content:center;">Kirim Pendaftaran</button>
+      <p style="text-align:center; margin-top:14px; font-size:13px; color:#5f7168;">Sudah mendaftar? <a href="/psb/cek" style="color:#16624a; font-weight:600;">Cek status pendaftaran</a></p>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

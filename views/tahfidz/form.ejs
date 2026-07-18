@@ -1,0 +1,40 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:760px;">
+  <div class="card-head"><h3><%= title %></h3></div>
+  <div class="card-body">
+    <form method="post" action="<%= action %>">
+      <div class="form-grid">
+        <div class="form-row"><label>Tanggal *</label><input type="date" name="tanggal" value="<%= t.tanggal || '' %>" required></div>
+        <div class="form-row"><label>Santri *</label>
+          <select name="siswa_id" required><option value="">- Pilih santri -</option><% siswa.forEach(s => { %><option value="<%= s.id %>" <%= String(t.siswa_id)===String(s.id)?'selected':'' %>><%= s.nama %></option><% }) %></select>
+        </div>
+        <div class="form-row"><label>Jenis Setoran *</label>
+          <select name="jenis" required><option value="Ziyadah" <%= t.jenis==='Ziyadah'?'selected':'' %>>Ziyadah (Hafalan Baru)</option><option value="Murojaah" <%= t.jenis==='Murojaah'?'selected':'' %>>Murojaah (Pengulangan)</option></select>
+        </div>
+        <div class="form-row"><label>Musyrif Penyimak</label>
+          <select name="musyrif_id">
+            <option value="">- Pilih -</option>
+            <% musyrif.forEach(g => { const sel = t.musyrif_id ? String(t.musyrif_id)===String(g.id) : (user.ref_id && String(user.ref_id)===String(g.id)); %>
+              <option value="<%= g.id %>" <%= sel?'selected':'' %>><%= g.nama %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-row"><label>Juz</label><input type="number" name="juz" value="<%= t.juz || '' %>" min="1" max="30" placeholder="1-30"></div>
+        <div class="form-row"><label>Surah *</label><input type="text" name="surah" value="<%= t.surah || '' %>" placeholder="mis. An-Naba" required></div>
+        <div class="form-row"><label>Ayat Dari</label><input type="number" name="ayat_dari" value="<%= t.ayat_dari || '' %>" min="1"></div>
+        <div class="form-row"><label>Ayat Sampai</label><input type="number" name="ayat_sampai" value="<%= t.ayat_sampai || '' %>" min="1"></div>
+        <div class="form-row"><label>Nilai</label>
+          <select name="nilai">
+            <option value="">- Belum dinilai -</option>
+            <% ['Mumtaz','Jayyid Jiddan','Jayyid','Maqbul','Mengulang'].forEach(n => { %><option value="<%= n %>" <%= t.nilai===n?'selected':'' %>><%= n %></option><% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="form-row"><label>Catatan Musyrif</label><textarea name="catatan"><%= t.catatan || '' %></textarea></div>
+      <div class="form-actions"><button class="btn">Simpan</button><a href="/tahfidz" class="btn btn-muted">Batal</a></div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

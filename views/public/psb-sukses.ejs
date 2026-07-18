@@ -1,0 +1,36 @@
+<%- include('partials/head', { heroNav: false }) %>
+
+<section class="page-top">
+  <div class="container">
+    <h1>Pendaftaran Berhasil</h1>
+    <p>Terima kasih telah mendaftar di MBS Poncowati</p>
+  </div>
+</section>
+
+<div class="result-card">
+  <div class="result-inner">
+    <div class="check">✓</div>
+    <h2 style="color:#0c3d2c;">Alhamdulillah, pendaftaran diterima!</h2>
+    <p style="color:#5f7168; margin-top:6px;">Simpan nomor registrasi berikut untuk mengecek status pendaftaran Anda.</p>
+
+    <div class="reg-box">
+      <div class="lbl">Nomor Registrasi</div>
+      <div class="no"><%= pendaftar.no_reg %></div>
+    </div>
+
+    <div class="info-list">
+      <div><span>Nama Calon Santri</span><span><strong><%= pendaftar.nama %></strong></span></div>
+      <div><span>Jenjang</span><span><%= pendaftar.jenjang %></span></div>
+      <div><span>Jenis Kelamin</span><span><%= pendaftar.jk === 'L' ? 'Laki-laki' : 'Perempuan' %></span></div>
+      <div><span>Status</span><span class="badge-status s-baru">Menunggu Verifikasi</span></div>
+    </div>
+
+    <p style="color:#5f7168; font-size:14px;">Tim PSB akan menghubungi Anda melalui kontak yang didaftarkan untuk proses verifikasi selanjutnya.</p>
+    <div style="display:flex; gap:12px; justify-content:center; margin-top:22px; flex-wrap:wrap;">
+      <a href="/psb/cek?reg=<%= pendaftar.no_reg %>" class="btn btn-outline">Cek Status</a>
+      <a href="/" class="btn btn-green">Kembali ke Beranda</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

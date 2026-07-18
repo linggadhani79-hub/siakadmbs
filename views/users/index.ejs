@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Manajemen Pengguna</h3><p class="muted"><%= users.length %> akun</p></div>
+  <a href="/users/tambah" class="btn btn-sm">+ Tambah</a>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Status</th><th>Aksi</th></tr></thead>
+    <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td><%= u.username %></td>
+          <td><%= u.nama %></td>
+          <td><span class="tag <%= u.role==='admin'?'tag-gold':(u.role==='siswa'?'tag-gray':'tag-green') %>"><%= u.role %></span></td>
+          <td><%= u.aktif ? '<span class="tag tag-green">Aktif</span>' : '<span class="tag tag-red">Nonaktif</span>' %></td>
+          <td class="actions">
+            <form method="post" action="/users/<%= u.id %>/reset" onsubmit="this.password.value=prompt('Password baru untuk <%= u.username %>:')||''; return this.password.value.length>=4">
+              <input type="hidden" name="password">
+              <button class="btn btn-sm btn-outline">Reset PW</button>
+            </form>
+            <form method="post" action="/users/<%= u.id %>/toggle"><button class="btn btn-sm btn-muted"><%= u.aktif ? 'Nonaktifkan' : 'Aktifkan' %></button></form>
+            <form method="post" action="/users/<%= u.id %>?_method=DELETE" onsubmit="return confirm('Hapus akun ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

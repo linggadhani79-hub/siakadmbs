@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Rekap Capaian Tahfidz</h3><p class="muted">Ringkasan progres hafalan seluruh santri</p></div>
+  <a href="/tahfidz" class="btn btn-sm btn-muted">← Kembali</a>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>Santri</th><th>Kelas</th><th>Juz Tertinggi</th><th>Sesi Ziyadah</th><th>Sesi Murojaah</th><th>Setoran Terakhir</th></tr></thead>
+    <tbody>
+      <% if (rekap.length===0){ %><tr><td colspan="7" class="empty">Belum ada data.</td></tr><% } %>
+      <% rekap.forEach((r,i) => { %>
+        <tr>
+          <td><%= i+1 %></td>
+          <td><a href="/siswa/<%= r.id %>"><%= r.nama %></a></td>
+          <td><%= r.kelas || '-' %></td>
+          <td><%= r.juz_tertinggi ? `<span class="tag tag-gold">Juz ${r.juz_tertinggi}</span>` : '<span class="muted">-</span>' %></td>
+          <td><%= r.ziyadah %></td>
+          <td><%= r.murojaah %></td>
+          <td><%= r.terakhir || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

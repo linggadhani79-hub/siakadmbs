@@ -1,0 +1,102 @@
+<%- include('partials/header') %>
+
+<p class="muted" style="margin-bottom:18px;">Assalamu'alaikum, <strong><%= currentUser.nama %></strong> · <%= today %></p>
+
+<div class="stat-grid">
+  <div class="stat"><div class="ic">🧑‍🎓</div><div><div class="n"><%= stats.siswa %></div><div class="l">Santri Aktif</div></div></div>
+  <div class="stat"><div class="ic">🧑‍🏫</div><div><div class="n"><%= stats.guru %></div><div class="l">Guru & Musyrif</div></div></div>
+  <div class="stat"><div class="ic">🏫</div><div><div class="n"><%= stats.kelas %></div><div class="l">Rombel</div></div></div>
+  <div class="stat"><div class="ic">🛏️</div><div><div class="n"><%= stats.kamar %></div><div class="l">Kamar Asrama</div></div></div>
+  <div class="stat"><div class="ic">📓</div><div><div class="n"><%= stats.jurnalHariIni %></div><div class="l">Jurnal Hari Ini</div></div></div>
+  <div class="stat"><div class="ic">📖</div><div><div class="n"><%= stats.setoranHariIni %></div><div class="l">Setoran Hari Ini</div></div></div>
+  <a href="/pendaftar?status=Baru" class="stat" style="text-decoration:none;"><div class="ic">📝</div><div><div class="n"><%= stats.pendaftarBaru %></div><div class="l">Pendaftar Baru (PSB)</div></div></a>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:22px;">
+  <div class="card">
+    <div class="card-head"><h3>📓 Jurnal Mengajar Terbaru</h3><a href="/jurnal" class="btn btn-sm btn-outline">Lihat Semua</a></div>
+    <div class="card-body p0">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Kelas</th><th>Mapel</th><th>Materi</th></tr></thead>
+          <tbody>
+            <% if (jurnalTerbaru.length === 0) { %>
+              <tr><td colspan="4" class="empty">Belum ada jurnal.</td></tr>
+            <% } %>
+            <% jurnalTerbaru.forEach(j => { %>
+              <tr>
+                <td><%= j.tanggal %></td>
+                <td><span class="tag tag-blue"><%= j.kelas %></span></td>
+                <td><%= j.mapel %></td>
+                <td><%= j.materi %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>📖 Setoran Tahfidz Terbaru</h3><a href="/tahfidz" class="btn btn-sm btn-outline">Lihat Semua</a></div>
+    <div class="card-body p0">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tanggal</th><th>Santri</th><th>Setoran</th><th>Nilai</th></tr></thead>
+          <tbody>
+            <% if (tahfidzTerbaru.length === 0) { %>
+              <tr><td colspan="4" class="empty">Belum ada setoran.</td></tr>
+            <% } %>
+            <% tahfidzTerbaru.forEach(t => { %>
+              <tr>
+                <td><%= t.tanggal %></td>
+                <td><%= t.siswa %></td>
+                <td><span class="tag <%= t.jenis==='Ziyadah'?'tag-green':'tag-gold' %>"><%= t.jenis %></span> <%= t.surah %> <%= t.ayat_dari %>-<%= t.ayat_sampai %></td>
+                <td><%= t.nilai || '-' %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:22px;">
+  <div class="card">
+    <div class="card-head"><h3>🏢 Hunian Asrama</h3><a href="/kamar" class="btn btn-sm btn-outline">Kelola Kamar</a></div>
+    <div class="card-body">
+      <% hunian.forEach(h => { const pct = h.kapasitas>0 ? Math.round(h.terisi/h.kapasitas*100) : 0; %>
+        <div style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <span><%= h.asrama %> <span class="tag <%= h.gender==='Putra'?'tag-blue':'tag-red' %>"><%= h.gender %></span></span>
+            <span class="muted"><%= h.terisi %>/<%= h.kapasitas %> santri</span>
+          </div>
+          <div class="progress"><span style="width:<%= pct %>%"></span></div>
+        </div>
+      <% }) %>
+      <% if (hunian.length === 0) { %><p class="empty">Belum ada data asrama.</p><% } %>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>🏆 Santri Teraktif Tahfidz</h3></div>
+    <div class="card-body p0">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Santri</th><th>Sesi Ziyadah</th><th>Juz Tertinggi</th></tr></thead>
+          <tbody>
+            <% if (topTahfidz.length === 0) { %>
+              <tr><td colspan="3" class="empty">Belum ada data.</td></tr>
+            <% } %>
+            <% topTahfidz.forEach(t => { %>
+              <tr><td><%= t.nama %></td><td><%= t.sesi %></td><td><span class="tag tag-gold">Juz <%= t.juz_tertinggi %></span></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

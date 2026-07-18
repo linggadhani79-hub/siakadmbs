@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Jurnal Mengajar</h3><p class="muted"><%= jurnal.length %> catatan kegiatan belajar</p></div>
+  <div class="filters">
+    <form method="get" style="display:flex; gap:8px;">
+      <input type="date" name="tanggal" value="<%= filter.tanggal || '' %>">
+      <select name="kelas_id" onchange="this.form.submit()">
+        <option value="">Semua Kelas</option>
+        <% kelas.forEach(k => { %><option value="<%= k.id %>" <%= String(filter.kelas_id)===String(k.id)?'selected':'' %>><%= k.nama %></option><% }) %>
+      </select>
+      <% if (currentUser.role==='admin') { %>
+        <select name="guru_id" onchange="this.form.submit()">
+          <option value="">Semua Guru</option>
+          <% guru.forEach(g => { %><option value="<%= g.id %>" <%= String(filter.guru_id)===String(g.id)?'selected':'' %>><%= g.nama %></option><% }) %>
+        </select>
+      <% } %>
+      <button class="btn btn-outline btn-sm">Filter</button>
+    </form>
+    <% if (canManage) { %><a href="/jurnal/tambah" class="btn btn-sm">+ Jurnal</a><% } %>
+  </div>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Tanggal</th><th>Jam</th><th>Kelas</th><th>Mapel</th><th>Materi</th><th>Guru</th><th>Hadir</th><% if (canManage) { %><th></th><% } %></tr></thead>
+    <tbody>
+      <% if (jurnal.length===0){ %><tr><td colspan="8" class="empty">Belum ada jurnal.</td></tr><% } %>
+      <% jurnal.forEach(j => { %>
+        <tr>
+          <td><%= j.tanggal %></td>
+          <td><%= j.jam_ke || '-' %></td>
+          <td><span class="tag tag-blue"><%= j.kelas %></span></td>
+          <td><%= j.mapel %></td>
+          <td><%= j.materi %><% if (j.catatan && j.catatan!=='-') { %><br><span class="muted">📝 <%= j.catatan %></span><% } %></td>
+          <td><%= j.guru %></td>
+          <td><%= j.kehadiran %>/<%= j.total_siswa %></td>
+          <% if (canManage) { %>
+            <td class="actions">
+              <a href="/jurnal/<%= j.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+              <form method="post" action="/jurnal/<%= j.id %>?_method=DELETE" onsubmit="return confirm('Hapus jurnal ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+            </td>
+          <% } %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>
