@@ -1,5 +1,29 @@
     </div>
   </div>
+
+  <!-- Bottom navigation (mobile) -->
+  <nav class="bottom-nav">
+    <a href="/dashboard" class="bn-item <%= path === '/dashboard' ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+      <span>Beranda</span>
+    </a>
+    <a href="/jadwal" class="bn-item <%= path.startsWith('/jadwal') ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg>
+      <span>Jadwal</span>
+    </a>
+    <a href="/absensi" class="bn-item <%= path.startsWith('/absensi') ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5l2 2 4.5-4.5"/><rect x="3.5" y="3.5" width="17" height="17" rx="4"/></svg>
+      <span>Absensi</span>
+    </a>
+    <a href="/tahfidz" class="bn-item <%= path.startsWith('/tahfidz') ? 'active' : '' %>">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></svg>
+      <span>Tahfidz</span>
+    </a>
+    <button type="button" class="bn-item bn-more" onclick="document.body.classList.toggle('nav-open')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+      <span>Menu</span>
+    </button>
+  </nav>
 </div>
 </body>
 </html>

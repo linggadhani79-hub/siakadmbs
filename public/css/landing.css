@@ -259,7 +259,7 @@ a { text-decoration: none; color: inherit; }
   .hero .cta, .hero .jenjang-pills, .hero .badge-pill { justify-content: center; }
   .hero p.sub { margin-inline: auto; }
   .scene { min-height: 380px; margin-top: 20px; }
-  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-3, .news { grid-template-columns: 1fr 1fr; }
   .foot .grid { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
@@ -272,9 +272,11 @@ a { text-decoration: none; color: inherit; }
   .stats-card { grid-template-columns: 1fr 1fr; }
   .stat-i + .stat-i { border-left: none; }
   .stat-i:nth-child(n+3) { border-top: 1px solid #eef2f0; padding-top: 16px; }
-  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .grid-3, .grid-2, .news { grid-template-columns: 1fr; }
   .foot .grid { grid-template-columns: 1fr; }
   .two { grid-template-columns: 1fr; }
-  .sec { padding: 60px 0; }
-  .chip-a { right: -10px; } .chip-b { left: -14px; }
+  .sec { padding: 56px 0; }
+  .chip-a { right: 4px; } .chip-b { left: -6px; }
+  .hero h1 { font-size: clamp(30px, 8vw, 40px); }
+  .h-title { font-size: clamp(24px, 6.5vw, 34px); }
 }
