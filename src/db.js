@@ -132,6 +132,18 @@ function migrate() {
       siswa_id      INTEGER REFERENCES siswa(id) ON DELETE SET NULL,
       created_at    TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
+
+    CREATE TABLE IF NOT EXISTS berita (
+      id         INTEGER PRIMARY KEY AUTOINCREMENT,
+      judul      TEXT NOT NULL,
+      kategori   TEXT NOT NULL DEFAULT 'Berita' CHECK(kategori IN ('Berita','Pengumuman','Prestasi','Kegiatan')),
+      ringkasan  TEXT,
+      isi        TEXT NOT NULL,
+      gambar     TEXT,
+      penulis    TEXT,
+      publish    INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+    );
   `);
 }
 

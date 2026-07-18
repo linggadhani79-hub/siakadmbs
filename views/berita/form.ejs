@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:820px;">
+  <div class="card-head"><h3><%= title %></h3></div>
+  <div class="card-body">
+    <form method="post" action="<%= action %>">
+      <div class="form-row"><label>Judul *</label><input type="text" name="judul" value="<%= b.judul || '' %>" required></div>
+      <div class="form-grid">
+        <div class="form-row"><label>Kategori *</label>
+          <select name="kategori" required>
+            <% ['Berita','Pengumuman','Prestasi','Kegiatan'].forEach(k => { %>
+              <option value="<%= k %>" <%= b.kategori===k?'selected':'' %>><%= k %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="form-row"><label>Penulis</label><input type="text" name="penulis" value="<%= b.penulis || '' %>" placeholder="mis. Humas MBS"></div>
+      </div>
+      <div class="form-row"><label>URL Gambar (opsional)</label><input type="text" name="gambar" value="<%= b.gambar || '' %>" placeholder="https://..."></div>
+      <div class="form-row"><label>Ringkasan</label><textarea name="ringkasan" placeholder="Ringkasan singkat yang tampil di daftar berita"><%= b.ringkasan || '' %></textarea></div>
+      <div class="form-row"><label>Isi Berita *</label><textarea name="isi" style="min-height:200px;" required><%= b.isi || '' %></textarea></div>
+      <div class="form-row">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+          <input type="checkbox" name="publish" value="1" style="width:auto;" <%= b.publish ? 'checked' : '' %>> Terbitkan (tampil di situs publik)
+        </label>
+      </div>
+      <div class="form-actions"><button class="btn">Simpan</button><a href="/kelola-berita" class="btn btn-muted">Batal</a></div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -136,3 +136,29 @@ function seed() {
 }
 
 seed();
+
+// Seed berita (idempoten, terpisah dari seed utama)
+function seedBerita() {
+  if (count('berita') > 0) return;
+  const ins = db.prepare(
+    `INSERT INTO berita (judul, kategori, ringkasan, isi, penulis, created_at) VALUES (?,?,?,?,?,?)`
+  );
+  const items = [
+    ['Penerimaan Santri Baru 2026/2027 Resmi Dibuka', 'Pengumuman',
+      'Pendaftaran santri baru jenjang SMP & SMA MBS Poncowati telah dibuka. Segera daftarkan putra-putri Anda.',
+      'Dengan mengucap bismillah, MBS Poncowati resmi membuka Penerimaan Santri Baru (PSB) tahun ajaran 2026/2027 untuk jenjang SMP dan SMA. Pendaftaran dapat dilakukan secara online melalui website ini. Calon santri akan mengikuti proses verifikasi berkas dan wawancara. Fasilitas asrama putra dan putri tersedia dengan pembinaan tahfidz Al-Quran terstruktur. Informasi lebih lanjut hubungi panitia PSB.',
+      'Panitia PSB', '2026-07-10 08:00:00'],
+    ['Santri MBS Poncowati Raih Juara MHQ Tingkat Kabupaten', 'Prestasi',
+      'Alhamdulillah, santri kami meraih juara pada Musabaqah Hifzhil Quran tingkat kabupaten.',
+      'Prestasi membanggakan kembali diukir oleh santri MBS Poncowati. Pada ajang Musabaqah Hifzhil Quran (MHQ) tingkat kabupaten, santri kami berhasil meraih juara kategori 5 juz dan 10 juz. Capaian ini merupakan buah dari pembinaan tahfidz yang konsisten setiap hari melalui program ziyadah dan murojaah bersama para musyrif. Semoga menjadi motivasi bagi seluruh santri.',
+      'Humas MBS', '2026-07-05 10:30:00'],
+    ['Kegiatan Tahsin dan Pembinaan Akhlak Rutin Pekanan', 'Kegiatan',
+      'Program pembinaan karakter dan tahsin Al-Quran rutin dilaksanakan setiap pekan.',
+      'MBS Poncowati menyelenggarakan kegiatan tahsin Al-Quran dan pembinaan akhlak secara rutin setiap pekan. Kegiatan ini bertujuan memperbaiki bacaan santri sesuai kaidah tajwid sekaligus menanamkan nilai-nilai akhlak mulia. Seluruh santri jenjang SMP dan SMA mengikuti kegiatan ini di bawah bimbingan asatidz dan musyrif asrama.',
+      'Bidang Kesantrian', '2026-06-28 09:00:00'],
+  ];
+  const tx = db.transaction(() => items.forEach((it) => ins.run(...it)));
+  tx();
+  console.log('Seeding berita selesai.');
+}
+seedBerita();

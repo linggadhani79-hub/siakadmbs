@@ -41,6 +41,12 @@
       </nav>
     <% } %>
     <% if (role === 'admin') { %>
+      <div class="nav-section">Konten Publik</div>
+      <nav>
+        <a href="/kelola-berita" class="<%= path.startsWith('/kelola-berita') ? 'active' : '' %>"><span class="ic">📰</span><span>Berita &amp; Pengumuman</span></a>
+      </nav>
+    <% } %>
+    <% if (role === 'admin') { %>
       <div class="nav-section">Sistem</div>
       <nav>
         <a href="/users" class="<%= path.startsWith('/users') ? 'active' : '' %>"><span class="ic">👥</span><span>Pengguna</span></a>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bukti Pendaftaran <%= pendaftar.no_reg %> · MBS Poncowati</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, "Segoe UI", Roboto, sans-serif; background: #eef2f0; color: #1f2a26; padding: 24px; }
+    .sheet { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,.12); overflow: hidden; }
+    .head { background: linear-gradient(135deg, #0c3d2c, #16624a); color: #fff; padding: 26px 30px; display: flex; align-items: center; gap: 16px; }
+    .head .logo { width: 56px; height: 56px; border-radius: 14px; background: #d4af37; color: #2b220a; display: grid; place-items: center; font-weight: 800; font-size: 26px; }
+    .head h1 { font-size: 20px; }
+    .head p { font-size: 13px; opacity: .9; }
+    .title { text-align: center; padding: 20px; border-bottom: 2px dashed #e2e8e4; }
+    .title h2 { color: #0c3d2c; font-size: 18px; letter-spacing: .5px; }
+    .title .reg { margin-top: 8px; font-size: 26px; font-weight: 900; color: #16624a; letter-spacing: 1px; }
+    .body { padding: 26px 30px; }
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 10px 6px; border-bottom: 1px solid #eef2f0; font-size: 15px; vertical-align: top; }
+    td.k { color: #6b7a74; width: 190px; }
+    td.v { font-weight: 600; }
+    .status { display: inline-block; padding: 4px 14px; border-radius: 999px; font-weight: 700; font-size: 13px; background: #e5eff7; color: #1d5b86; }
+    .status.ok { background: #e6f4ea; color: #1c6b3a; }
+    .status.no { background: #fbe7e4; color: #b3311f; }
+    .note { margin: 22px 30px; padding: 14px 16px; background: #f6faf8; border-left: 4px solid #16624a; border-radius: 8px; font-size: 13px; color: #4c5b54; }
+    .sign { display: flex; justify-content: flex-end; padding: 10px 30px 30px; }
+    .sign .box { text-align: center; font-size: 13px; color: #5f7168; }
+    .sign .box .line { margin-top: 60px; border-top: 1px solid #333; padding-top: 6px; min-width: 200px; }
+    .toolbar { max-width: 720px; margin: 0 auto 16px; display: flex; gap: 10px; justify-content: center; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; text-decoration: none; }
+    .btn-p { background: #16624a; color: #fff; }
+    .btn-s { background: #eef1ef; color: #1f2a26; }
+    .foot-code { text-align: center; padding: 14px; font-size: 12px; color: #8a998f; border-top: 1px solid #eef2f0; }
+    @media print { body { background: #fff; padding: 0; } .toolbar { display: none; } .sheet { box-shadow: none; border-radius: 0; max-width: 100%; } }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button class="btn btn-p" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+    <a class="btn btn-s" href="/psb/cek?reg=<%= pendaftar.no_reg %>">← Kembali</a>
+  </div>
+
+  <div class="sheet">
+    <div class="head">
+      <div class="logo">M</div>
+      <div>
+        <h1>MBS PONCOWATI</h1>
+        <p>Pondok Pesantren · SMP &amp; SMA · Poncowati, Terbanggi Besar, Lampung Tengah</p>
+      </div>
+    </div>
+
+    <div class="title">
+      <h2>BUKTI PENDAFTARAN SANTRI BARU</h2>
+      <div class="reg"><%= pendaftar.no_reg %></div>
+    </div>
+
+    <div class="body">
+      <table>
+        <tr><td class="k">Nama Calon Santri</td><td class="v"><%= pendaftar.nama %></td></tr>
+        <tr><td class="k">Jenis Kelamin</td><td class="v"><%= pendaftar.jk === 'L' ? 'Laki-laki' : 'Perempuan' %></td></tr>
+        <tr><td class="k">Jenjang Dituju</td><td class="v"><%= pendaftar.jenjang %> MBS Poncowati</td></tr>
+        <tr><td class="k">Tempat, Tanggal Lahir</td><td class="v"><%= pendaftar.tempat_lahir || '-' %><%= pendaftar.tgl_lahir ? ', ' + pendaftar.tgl_lahir : '' %></td></tr>
+        <tr><td class="k">Asal Sekolah</td><td class="v"><%= pendaftar.asal_sekolah || '-' %></td></tr>
+        <tr><td class="k">Nama Orang Tua/Wali</td><td class="v"><%= pendaftar.nama_ortu || '-' %></td></tr>
+        <tr><td class="k">No. HP / WhatsApp</td><td class="v"><%= pendaftar.no_hp || '-' %></td></tr>
+        <tr><td class="k">Tanggal Daftar</td><td class="v"><%= pendaftar.created_at %></td></tr>
+        <tr><td class="k">Status</td><td class="v">
+          <% if (pendaftar.status === 'Diterima') { %><span class="status ok">DITERIMA</span>
+          <% } else if (pendaftar.status === 'Ditolak') { %><span class="status no">BELUM LOLOS</span>
+          <% } else { %><span class="status">MENUNGGU VERIFIKASI</span><% } %>
+        </td></tr>
+      </table>
+    </div>
+
+    <div class="note">
+      <strong>Catatan:</strong> Simpan bukti pendaftaran ini dengan baik. Nomor registrasi digunakan untuk mengecek status penerimaan melalui website. Panitia PSB akan menghubungi Anda untuk proses verifikasi berikutnya.
+    </div>
+
+    <div class="sign">
+      <div class="box">
+        Poncowati, <%= new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) %>
+        <div class="line">Panitia PSB MBS Poncowati</div>
+      </div>
+    </div>
+
+    <div class="foot-code">Dokumen ini dicetak dari Sistem Informasi Akademik (SIAKAD) MBS Poncowati</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<%- include('partials/head', { heroNav: false }) %>
+
+<% const emoji = {'Pengumuman':'📢','Prestasi':'🏆','Kegiatan':'📅','Berita':'📰'}; %>
+<section class="page-top" style="padding-bottom:56px;">
+  <div class="container">
+    <span class="badge-pill" style="background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); display:inline-block; padding:6px 14px; border-radius:999px; font-size:13px; font-weight:600;"><%= b.kategori %></span>
+  </div>
+</section>
+
+<div class="news-detail">
+  <div class="inner">
+    <div class="hero-img">
+      <% if (b.gambar) { %><img src="<%= b.gambar %>" alt="<%= b.judul %>"><% } else { %><%= emoji[b.kategori] || '📰' %><% } %>
+    </div>
+    <div class="body">
+      <div class="meta">🗓️ <%= (b.created_at || '').slice(0,10) %> · ✍️ <%= b.penulis || 'Redaksi MBS' %></div>
+      <h1><%= b.judul %></h1>
+      <% if (b.ringkasan) { %><p style="font-size:17px; color:#5f7168; font-weight:500;"><%= b.ringkasan %></p><% } %>
+      <div class="isi"><%= b.isi %></div>
+
+      <% if (lain.length) { %>
+        <div class="lain">
+          <h3 style="color:var(--green-dark); margin-bottom:6px;">Berita Lainnya</h3>
+          <% lain.forEach(l => { %>
+            <a href="/berita/<%= l.id %>"><%= emoji[l.kategori] || '📰' %> <%= l.judul %> <span style="color:#8a998f; font-weight:400; font-size:13px;">· <%= (l.created_at||'').slice(0,10) %></span></a>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <div style="margin-top:26px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="/berita" class="btn btn-outline">← Semua Berita</a>
+        <a href="/" class="btn btn-green">Beranda</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

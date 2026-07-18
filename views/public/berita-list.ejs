@@ -1,0 +1,43 @@
+<%- include('partials/head', { heroNav: false }) %>
+
+<section class="page-top">
+  <div class="container">
+    <h1>Berita &amp; Pengumuman</h1>
+    <p>Informasi terkini seputar MBS Poncowati</p>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:40px;">
+  <div class="container">
+    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-bottom:32px;">
+      <a href="/berita" class="btn <%= kategori===''?'btn-green':'btn-outline' %>" style="padding:8px 18px;">Semua</a>
+      <% ['Berita','Pengumuman','Prestasi','Kegiatan'].forEach(k => { %>
+        <a href="/berita?kategori=<%= k %>" class="btn <%= kategori===k?'btn-green':'btn-outline' %>" style="padding:8px 18px;"><%= k %></a>
+      <% }) %>
+    </div>
+
+    <% if (berita.length === 0) { %>
+      <p class="center lead">Belum ada berita pada kategori ini.</p>
+    <% } %>
+
+    <div class="news">
+      <% const emoji = {'Pengumuman':'📢','Prestasi':'🏆','Kegiatan':'📅','Berita':'📰'}; %>
+      <% berita.forEach(b => { %>
+        <a href="/berita/<%= b.id %>" class="news-card">
+          <div class="thumb">
+            <% if (b.gambar) { %><img src="<%= b.gambar %>" alt="<%= b.judul %>"><% } else { %><%= emoji[b.kategori] || '📰' %><% } %>
+            <span class="kat"><%= b.kategori %></span>
+          </div>
+          <div class="nb">
+            <span class="date"><%= (b.created_at || '').slice(0,10) %></span>
+            <h3><%= b.judul %></h3>
+            <p><%= b.ringkasan || (b.isi.slice(0,110) + '...') %></p>
+            <span class="more">Baca selengkapnya →</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

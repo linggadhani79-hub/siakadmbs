@@ -1,0 +1,34 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Berita &amp; Pengumuman</h3><p class="muted"><%= berita.length %> artikel</p></div>
+  <div class="filters">
+    <a href="/berita" target="_blank" class="btn btn-sm btn-outline">🌐 Lihat di Situs</a>
+    <a href="/kelola-berita/tambah" class="btn btn-sm">+ Tulis Berita</a>
+  </div>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Judul</th><th>Kategori</th><th>Penulis</th><th>Tanggal</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <% if (berita.length===0){ %><tr><td colspan="6" class="empty">Belum ada berita.</td></tr><% } %>
+      <% berita.forEach(b => {
+           const kt = {'Pengumuman':'tag-red','Prestasi':'tag-gold','Kegiatan':'tag-blue','Berita':'tag-green'}[b.kategori]; %>
+        <tr>
+          <td><a href="/berita/<%= b.id %>" target="_blank"><%= b.judul %></a></td>
+          <td><span class="tag <%= kt %>"><%= b.kategori %></span></td>
+          <td><%= b.penulis || '-' %></td>
+          <td><%= (b.created_at || '').slice(0,10) %></td>
+          <td><%= b.publish ? '<span class="tag tag-green">Terbit</span>' : '<span class="tag tag-gray">Draf</span>' %></td>
+          <td class="actions">
+            <a href="/kelola-berita/<%= b.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+            <form method="post" action="/kelola-berita/<%= b.id %>?_method=DELETE" onsubmit="return confirm('Hapus berita ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

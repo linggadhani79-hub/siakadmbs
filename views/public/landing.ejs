@@ -118,6 +118,37 @@
   </div>
 </section>
 
+<!-- ===== BERITA ===== -->
+<% if (berita && berita.length) { %>
+<section class="sec" id="berita" style="background:#eef5f1;">
+  <div class="container">
+    <div class="center reveal" style="margin-bottom:44px;">
+      <span class="eyebrow">Informasi Terkini</span>
+      <h2 class="h-title">Berita &amp; Pengumuman</h2>
+      <p class="lead">Ikuti perkembangan kegiatan, prestasi, dan pengumuman terbaru dari MBS Poncowati.</p>
+    </div>
+    <div class="news">
+      <% const emoji = {'Pengumuman':'📢','Prestasi':'🏆','Kegiatan':'📅','Berita':'📰'}; %>
+      <% berita.forEach(b => { %>
+        <a href="/berita/<%= b.id %>" class="news-card reveal">
+          <div class="thumb">
+            <% if (b.gambar) { %><img src="<%= b.gambar %>" alt="<%= b.judul %>"><% } else { %><%= emoji[b.kategori] || '📰' %><% } %>
+            <span class="kat"><%= b.kategori %></span>
+          </div>
+          <div class="nb">
+            <span class="date"><%= (b.created_at || '').slice(0,10) %></span>
+            <h3><%= b.judul %></h3>
+            <p><%= b.ringkasan || (b.isi.slice(0,110) + '...') %></p>
+            <span class="more">Baca selengkapnya →</span>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+    <div class="center" style="margin-top:34px;"><a href="/berita" class="btn btn-outline">Lihat Semua Berita</a></div>
+  </div>
+</section>
+<% } %>
+
 <!-- ===== CTA PSB ===== -->
 <section class="sec">
   <div class="container">

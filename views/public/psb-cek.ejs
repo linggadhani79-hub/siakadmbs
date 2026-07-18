@@ -44,6 +44,7 @@
         <% if (pendaftar.status === 'Diterima') { %>
           <div class="alert alert-ok" style="margin-top:8px;">Selamat! Anda dinyatakan <strong>diterima</strong>. Silakan menghubungi pihak sekolah untuk daftar ulang.</div>
         <% } %>
+        <div style="margin-top:16px;"><a href="/psb/cetak?reg=<%= pendaftar.no_reg %>" target="_blank" class="btn btn-gold">🖨️ Cetak Bukti Pendaftaran</a></div>
       </div>
     <% } %>
 

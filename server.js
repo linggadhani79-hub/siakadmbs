@@ -41,6 +41,7 @@ app.use('/', require('./src/routes/public'));
 app.use('/', require('./src/routes/auth'));
 app.use('/dashboard', requireLogin, require('./src/routes/dashboard'));
 app.use('/pendaftar', requireLogin, require('./src/routes/pendaftar'));
+app.use('/kelola-berita', requireLogin, require('./src/routes/berita'));
 app.use('/siswa', requireLogin, require('./src/routes/siswa'));
 app.use('/guru', requireLogin, require('./src/routes/guru'));
 app.use('/kelas', requireLogin, require('./src/routes/kelas'));

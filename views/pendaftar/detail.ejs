@@ -34,6 +34,7 @@
   <div class="card" style="align-self:start;">
     <div class="card-head"><h3>Tindakan</h3></div>
     <div class="card-body">
+      <a href="/psb/cetak?reg=<%= p.no_reg %>" target="_blank" class="btn btn-block btn-outline" style="margin-bottom:12px;">🖨️ Cetak Bukti Pendaftaran</a>
       <% if (p.status === 'Diterima') { %>
         <div class="flash flash-success" style="margin-bottom:14px;">Pendaftar telah <strong>diterima</strong> dan masuk ke data siswa.</div>
         <% if (p.siswa_id) { %><a href="/siswa/<%= p.siswa_id %>" class="btn btn-block" style="margin-bottom:10px;">Lihat Data Siswa</a><% } %>

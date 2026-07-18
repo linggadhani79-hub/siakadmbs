@@ -11,11 +11,42 @@ router.get('/', (req, res) => {
     kelas: db.prepare('SELECT COUNT(*) c FROM kelas').get().c,
     pendaftar: db.prepare('SELECT COUNT(*) c FROM pendaftar').get().c,
   };
+  const berita = db
+    .prepare('SELECT * FROM berita WHERE publish=1 ORDER BY created_at DESC, id DESC LIMIT 3')
+    .all();
   res.render('public/landing', {
     title: 'Beranda',
     stats,
+    berita,
     user: req.session.user || null,
   });
+});
+
+// ===== Berita publik =====
+router.get('/berita', (req, res) => {
+  const { kategori } = req.query;
+  let sql = 'SELECT * FROM berita WHERE publish=1';
+  const params = [];
+  if (kategori) { sql += ' AND kategori=?'; params.push(kategori); }
+  sql += ' ORDER BY created_at DESC, id DESC';
+  const berita = db.prepare(sql).all(...params);
+  res.render('public/berita-list', { title: 'Berita & Pengumuman', berita, kategori: kategori || '', user: req.session.user || null });
+});
+
+router.get('/berita/:id(\\d+)', (req, res) => {
+  const b = db.prepare('SELECT * FROM berita WHERE id=? AND publish=1').get(req.params.id);
+  if (!b) return res.redirect('/berita');
+  const lain = db
+    .prepare('SELECT id,judul,kategori,created_at FROM berita WHERE publish=1 AND id!=? ORDER BY created_at DESC LIMIT 4')
+    .all(req.params.id);
+  res.render('public/berita-detail', { title: b.judul, b, lain, user: req.session.user || null });
+});
+
+// ===== Cetak bukti pendaftaran PSB =====
+router.get('/psb/cetak', (req, res) => {
+  const pendaftar = db.prepare('SELECT * FROM pendaftar WHERE no_reg=?').get(req.query.reg || '');
+  if (!pendaftar) return res.redirect('/psb/cek');
+  res.render('public/psb-cetak', { pendaftar });
 });
 
 // ===== PSB: Form Pendaftaran =====
