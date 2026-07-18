@@ -269,6 +269,34 @@ a { text-decoration: none; color: inherit; }
 .s-diterima { background: #e6f4ea; color: #1c6b3a; }
 .s-ditolak { background: #fbe7e4; color: #b3311f; }
 
+/* ===== Bottom nav publik (mobile) ===== */
+.pub-bnav { display: none; }
+@media (max-width: 720px) {
+  .pub-bnav {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    background: rgba(255,255,255,.94); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid #e6ece9; box-shadow: 0 -8px 30px rgba(12,61,44,.12);
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+    justify-content: space-around; align-items: flex-end;
+  }
+  .pub-bnav .pbn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    color: #7d928a; font-size: 10.5px; font-weight: 700; background: none; border: none; cursor: pointer;
+    font-family: inherit; text-decoration: none; padding: 4px 0; position: relative;
+  }
+  .pub-bnav .pbn svg { width: 24px; height: 24px; }
+  .pub-bnav .pbn.active { color: var(--green-dark); }
+  .pub-bnav .pbn.active svg { color: var(--green-2); filter: drop-shadow(0 4px 8px rgba(31,138,99,.35)); }
+  .pub-bnav .pbn-cta { color: var(--green-dark); }
+  .pub-bnav .pbn-cta .pbn-fab {
+    width: 52px; height: 52px; border-radius: 50%; margin-top: -26px; margin-bottom: 2px;
+    background: linear-gradient(135deg, var(--gold), #b8912a); color: #2b220a;
+    display: grid; place-items: center; box-shadow: 0 10px 24px rgba(212,175,55,.5);
+    border: 4px solid #fff;
+  }
+  .pub-bnav .pbn-cta .pbn-fab svg { width: 26px; height: 26px; }
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
@@ -284,7 +312,9 @@ a { text-decoration: none; color: inherit; }
   .nav .links.open { transform: translateY(0); }
   .nav .links a.nl { color: var(--green-dark); padding: 14px; border-radius: 12px; }
   .nav .links .btn { justify-content: center; margin-top: 8px; }
-  .nav .burger { display: flex; z-index: 60; }
+  .nav .burger { display: none; }
+  body { padding-bottom: 78px; }
+  .foot { padding-bottom: 40px; }
   .stats-card { grid-template-columns: 1fr 1fr; }
   .stat-i + .stat-i { border-left: none; }
   .stat-i:nth-child(n+3) { border-top: 1px solid #eef2f0; padding-top: 16px; }

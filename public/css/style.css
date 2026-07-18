@@ -312,6 +312,12 @@ textarea { resize: vertical; min-height: 70px; }
   div[style*="grid-template-columns: 1fr 1fr"],
   div[style*="grid-template-columns: 320px 1fr"],
   div[style*="grid-template-columns: 1fr 320px"] { grid-template-columns: 1fr !important; }
+  /* override SEMUA grid inline agar tidak keluar frame di mobile */
+  [style*="repeat(4"] { grid-template-columns: 1fr 1fr !important; }
+  [style*="repeat(3"], [style*="repeat(2"] { grid-template-columns: 1fr !important; }
+  /* form/baris flex inline agar membungkus, bukan terpotong */
+  .card-body form[style*="display:flex"], .card-body form[style*="display: flex"],
+  .content div[style*="display:flex"][style*="gap"] { flex-wrap: wrap; }
 
   /* ===== Tabel jadi kartu (tanpa scroll horizontal) ===== */
   .table-wrap { overflow-x: visible; }
