@@ -113,6 +113,25 @@ function migrate() {
       catatan     TEXT,
       created_at  TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
+
+    CREATE TABLE IF NOT EXISTS pendaftar (
+      id            INTEGER PRIMARY KEY AUTOINCREMENT,
+      no_reg        TEXT UNIQUE NOT NULL,
+      nama          TEXT NOT NULL,
+      jk            TEXT NOT NULL CHECK(jk IN ('L','P')),
+      jenjang       TEXT NOT NULL CHECK(jenjang IN ('SMP','SMA')),
+      tempat_lahir  TEXT,
+      tgl_lahir     TEXT,
+      asal_sekolah  TEXT,
+      alamat        TEXT,
+      nama_ortu     TEXT,
+      no_hp         TEXT,
+      email         TEXT,
+      catatan       TEXT,
+      status        TEXT NOT NULL DEFAULT 'Baru' CHECK(status IN ('Baru','Diterima','Ditolak')),
+      siswa_id      INTEGER REFERENCES siswa(id) ON DELETE SET NULL,
+      created_at    TEXT NOT NULL DEFAULT (datetime('now','localtime'))
+    );
   `);
 }
 

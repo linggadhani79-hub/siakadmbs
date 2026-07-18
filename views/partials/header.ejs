@@ -9,7 +9,8 @@
 <body>
 <div class="app">
   <% const role = currentUser.role; %>
-  <aside class="sidebar">
+  <div class="drawer-overlay" id="overlay" onclick="document.body.classList.remove('nav-open')"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="head">
       <div class="logo">M</div>
       <div>
@@ -19,10 +20,13 @@
     </div>
     <div class="nav-section">Utama</div>
     <nav>
-      <a href="/" class="<%= path === '/' ? 'active' : '' %>"><span class="ic">🏠</span><span>Dashboard</span></a>
+      <a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>"><span class="ic">🏠</span><span>Dashboard</span></a>
       <a href="/jurnal" class="<%= path.startsWith('/jurnal') ? 'active' : '' %>"><span class="ic">📓</span><span>Jurnal Mengajar</span></a>
       <a href="/tahfidz" class="<%= path.startsWith('/tahfidz') ? 'active' : '' %>"><span class="ic">📖</span><span>Tahfidz Quran</span></a>
       <a href="/kamar" class="<%= path.startsWith('/kamar') ? 'active' : '' %>"><span class="ic">🛏️</span><span>Pembagian Kamar</span></a>
+      <% if (role === 'admin' || role === 'guru' || role === 'musyrif') { %>
+        <a href="/pendaftar" class="<%= path.startsWith('/pendaftar') ? 'active' : '' %>"><span class="ic">📝</span><span>PSB / Pendaftar</span></a>
+      <% } %>
     </nav>
     <% if (role === 'admin' || role === 'guru' || role === 'musyrif') { %>
       <div class="nav-section">Data Master</div>
@@ -45,9 +49,13 @@
   </aside>
   <div class="main">
     <div class="topbar">
-      <h2><%= typeof title !== 'undefined' ? title : 'SIAKAD' %></h2>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="hamburger" aria-label="Menu" onclick="document.body.classList.toggle('nav-open')"><span></span><span></span><span></span></button>
+        <h2><%= typeof title !== 'undefined' ? title : 'SIAKAD' %></h2>
+      </div>
       <div class="user">
-        <span><%= currentUser.nama %></span>
+        <a href="/" target="_blank" class="btn btn-sm btn-outline" title="Lihat situs publik">🌐 Situs</a>
+        <span class="uname"><%= currentUser.nama %></span>
         <span class="badge"><%= currentUser.role %></span>
         <a href="/logout" class="btn btn-sm btn-muted">Keluar</a>
       </div>

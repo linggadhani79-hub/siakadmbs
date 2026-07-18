@@ -1,0 +1,54 @@
+<%- include('partials/head', { heroNav: false }) %>
+
+<section class="page-top">
+  <div class="container">
+    <h1>Cek Status Pendaftaran</h1>
+    <p>Masukkan nomor registrasi untuk melihat status PSB Anda</p>
+  </div>
+</section>
+
+<div class="result-card">
+  <div class="result-inner">
+    <form method="get" action="/psb/cek" style="display:flex; gap:10px; margin-bottom:8px;">
+      <input type="text" name="reg" value="<%= reg %>" placeholder="mis. PSB20260001" required
+             style="flex:1; padding:12px 14px; border:1.5px solid #e2e8e4; border-radius:12px; font-size:15px;">
+      <button class="btn btn-green">Cek</button>
+    </form>
+
+    <% if (notFound) { %>
+      <div class="alert alert-err" style="margin-top:16px;">Nomor registrasi <strong><%= reg %></strong> tidak ditemukan. Periksa kembali penulisannya.</div>
+    <% } %>
+
+    <% if (pendaftar) { %>
+      <div style="margin-top:24px; text-align:left;">
+        <div class="reg-box" style="text-align:center;">
+          <div class="lbl">Nomor Registrasi</div>
+          <div class="no"><%= pendaftar.no_reg %></div>
+        </div>
+        <div class="info-list">
+          <div><span>Nama</span><span><strong><%= pendaftar.nama %></strong></span></div>
+          <div><span>Jenjang</span><span><%= pendaftar.jenjang %></span></div>
+          <div><span>Tanggal Daftar</span><span><%= pendaftar.created_at %></span></div>
+          <div><span>Status</span>
+            <span>
+              <% if (pendaftar.status === 'Diterima') { %>
+                <span class="badge-status s-diterima">✓ Diterima</span>
+              <% } else if (pendaftar.status === 'Ditolak') { %>
+                <span class="badge-status s-ditolak">Belum Lolos</span>
+              <% } else { %>
+                <span class="badge-status s-baru">Menunggu Verifikasi</span>
+              <% } %>
+            </span>
+          </div>
+        </div>
+        <% if (pendaftar.status === 'Diterima') { %>
+          <div class="alert alert-ok" style="margin-top:8px;">Selamat! Anda dinyatakan <strong>diterima</strong>. Silakan menghubungi pihak sekolah untuk daftar ulang.</div>
+        <% } %>
+      </div>
+    <% } %>
+
+    <div style="margin-top:22px;"><a href="/" class="btn btn-outline">← Kembali ke Beranda</a></div>
+  </div>
+</div>
+
+<%- include('partials/foot') %>

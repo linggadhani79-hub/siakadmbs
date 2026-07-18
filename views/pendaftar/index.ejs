@@ -1,0 +1,55 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">PSB — Pendaftar Santri Baru</h3><p class="muted">Kelola pendaftaran calon santri</p></div>
+  <a href="/psb" target="_blank" class="btn btn-sm btn-outline">🌐 Form Pendaftaran Publik</a>
+</div>
+
+<div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">
+  <a href="/pendaftar" class="stat" style="text-decoration:none;"><div class="ic">📋</div><div><div class="n"><%= ringkasan.total %></div><div class="l">Total Pendaftar</div></div></a>
+  <a href="/pendaftar?status=Baru" class="stat" style="text-decoration:none;"><div class="ic">🆕</div><div><div class="n"><%= ringkasan.baru %></div><div class="l">Menunggu</div></div></a>
+  <a href="/pendaftar?status=Diterima" class="stat" style="text-decoration:none;"><div class="ic">✅</div><div><div class="n"><%= ringkasan.diterima %></div><div class="l">Diterima</div></div></a>
+  <a href="/pendaftar?status=Ditolak" class="stat" style="text-decoration:none;"><div class="ic">❌</div><div><div class="n"><%= ringkasan.ditolak %></div><div class="l">Ditolak</div></div></a>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Daftar Pendaftar</h3>
+    <form method="get" class="filters" style="display:flex; gap:8px;">
+      <select name="jenjang" onchange="this.form.submit()">
+        <option value="">Semua Jenjang</option>
+        <option value="SMP" <%= filter.jenjang==='SMP'?'selected':'' %>>SMP</option>
+        <option value="SMA" <%= filter.jenjang==='SMA'?'selected':'' %>>SMA</option>
+      </select>
+      <select name="status" onchange="this.form.submit()">
+        <option value="">Semua Status</option>
+        <option value="Baru" <%= filter.status==='Baru'?'selected':'' %>>Menunggu</option>
+        <option value="Diterima" <%= filter.status==='Diterima'?'selected':'' %>>Diterima</option>
+        <option value="Ditolak" <%= filter.status==='Ditolak'?'selected':'' %>>Ditolak</option>
+      </select>
+    </form>
+  </div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>No. Reg</th><th>Nama</th><th>JK</th><th>Jenjang</th><th>Asal Sekolah</th><th>Tgl Daftar</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <% if (pendaftar.length===0){ %><tr><td colspan="8" class="empty">Belum ada pendaftar.</td></tr><% } %>
+        <% pendaftar.forEach(p => {
+             const st = {'Baru':'tag-blue','Diterima':'tag-green','Ditolak':'tag-red'}[p.status]; %>
+          <tr>
+            <td><strong><%= p.no_reg %></strong></td>
+            <td><a href="/pendaftar/<%= p.id %>"><%= p.nama %></a></td>
+            <td><%= p.jk %></td>
+            <td><span class="tag tag-gold"><%= p.jenjang %></span></td>
+            <td><%= p.asal_sekolah || '-' %></td>
+            <td><%= (p.created_at || '').slice(0,10) %></td>
+            <td><span class="tag <%= st %>"><%= p.status==='Baru'?'Menunggu':p.status %></span></td>
+            <td><a href="/pendaftar/<%= p.id %>" class="btn btn-sm btn-muted">Detail</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<%- include('../partials/footer') %>

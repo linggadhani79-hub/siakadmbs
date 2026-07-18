@@ -1,0 +1,63 @@
+  <footer class="foot">
+    <div class="container">
+      <div class="grid">
+        <div>
+          <div class="brand"><span class="logo">M</span><b>MBS Poncowati</b></div>
+          <p style="max-width:340px; font-size:14px;">Madrasah Berbasis Sekolah Poncowati — membina generasi Qur'ani yang berakhlak, cerdas, dan mandiri melalui pendidikan formal SMP &amp; SMA terpadu pondok pesantren.</p>
+        </div>
+        <div>
+          <h5>Navigasi</h5>
+          <a href="/#profil">Profil Sekolah</a>
+          <a href="/#jenjang">Jenjang Pendidikan</a>
+          <a href="/#program">Program Unggulan</a>
+          <a href="/psb">Pendaftaran PSB</a>
+          <a href="/psb/cek">Cek Status Pendaftaran</a>
+        </div>
+        <div>
+          <h5>Kontak</h5>
+          <a>📍 Poncowati, Terbanggi Besar, Lampung Tengah</a>
+          <a>📞 0812-3456-7000</a>
+          <a>✉️ info@mbsponcowati.sch.id</a>
+          <a href="/login">🔒 Login Staff / Santri</a>
+        </div>
+      </div>
+      <div class="copy">© <%= new Date().getFullYear() %> MBS Poncowati. Sistem Informasi Akademik (SIAKAD).</div>
+    </div>
+  </footer>
+
+  <script>
+    // Navbar scroll state (hanya untuk halaman hero)
+    var nav = document.getElementById('nav');
+    var isHero = nav && !nav.classList.contains('scrolled');
+    if (isHero) {
+      window.addEventListener('scroll', function () {
+        nav.classList.toggle('scrolled', window.scrollY > 40);
+      });
+    }
+    // Mobile menu
+    var burger = document.getElementById('burger');
+    var links = document.getElementById('navLinks');
+    if (burger) burger.addEventListener('click', function () { links.classList.toggle('open'); });
+    if (links) links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { links.classList.remove('open'); }); });
+
+    // Reveal on scroll
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+    // Parallax tilt untuk kartu 3D
+    var stage = document.getElementById('stage');
+    var scene = document.getElementById('scene');
+    if (stage && scene && window.matchMedia('(pointer:fine)').matches) {
+      scene.addEventListener('mousemove', function (ev) {
+        var r = scene.getBoundingClientRect();
+        var x = (ev.clientX - r.left) / r.width - .5;
+        var y = (ev.clientY - r.top) / r.height - .5;
+        stage.style.transform = 'rotateY(' + (-14 + x * 22) + 'deg) rotateX(' + (6 - y * 18) + 'deg)';
+      });
+      scene.addEventListener('mouseleave', function () { stage.style.transform = ''; });
+    }
+  </script>
+</body>
+</html>

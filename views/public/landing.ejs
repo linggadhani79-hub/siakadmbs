@@ -1,0 +1,135 @@
+<%- include('partials/head', { heroNav: true }) %>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="container hero-grid">
+    <div>
+      <span class="badge-pill">🕌 Pondok Pesantren Modern · Est. Poncowati</span>
+      <h1>Membina Generasi <span class="accent">Qur'ani</span> yang Cerdas &amp; Berakhlak</h1>
+      <p class="sub">MBS Poncowati menyelenggarakan pendidikan formal jenjang <strong>SMP</strong> dan <strong>SMA</strong> yang terintegrasi dengan pondok pesantren dan program <strong>Tahfidz Al-Quran</strong>.</p>
+      <div class="cta">
+        <a href="/psb" class="btn btn-gold">📝 Daftar Santri Baru</a>
+        <a href="#profil" class="btn btn-ghost">Kenali Kami</a>
+      </div>
+      <div class="jenjang-pills">
+        <span class="jp">🎓 SMP MBS</span>
+        <span class="jp">🎓 SMA MBS</span>
+        <span class="jp">📖 Tahfidz Quran</span>
+        <span class="jp">🏠 Asrama Putra &amp; Putri</span>
+      </div>
+    </div>
+
+    <!-- 3D scene -->
+    <div class="scene" id="scene">
+      <div class="stage" id="stage">
+        <div class="card3d">
+          <div class="roof">
+            <div class="dome"><span class="ball"></span><span class="body"></span></div>
+          </div>
+          <div class="body-c">
+            <div class="t">MBS Poncowati</div>
+            <div class="s">Sekolah Berasrama Terpadu</div>
+            <div class="row"><span class="dot">📖</span><div class="bar"><div class="l">Target Tahfidz</div><div class="p"><i style="width:82%"></i></div></div></div>
+            <div class="row"><span class="dot">🎓</span><div class="bar"><div class="l">Prestasi Akademik</div><div class="p"><i style="width:90%"></i></div></div></div>
+            <div class="row"><span class="dot">🤲</span><div class="bar"><div class="l">Pembinaan Akhlak</div><div class="p"><i style="width:95%"></i></div></div></div>
+          </div>
+        </div>
+        <div class="chip3d chip-a"><span class="ic">📖</span> 30 Juz</div>
+        <div class="chip3d chip-b"><span class="ic">🏆</span> Berprestasi</div>
+        <div class="chip3d chip-c"><span class="ic">🕌</span> Berasrama</div>
+      </div>
+    </div>
+  </div>
+  <div class="wave">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" width="100%" height="90"><path fill="#f6faf8" d="M0,64L60,58.7C120,53,240,43,360,48C480,53,600,75,720,80C840,85,960,75,1080,64C1200,53,1320,43,1380,37.3L1440,32L1440,120L0,120Z"></path></svg>
+  </div>
+</header>
+
+<!-- ===== STATS ===== -->
+<section class="container stats-strip">
+  <div class="stats-card reveal">
+    <div class="stat-i"><div class="n"><%= stats.santri %>+</div><div class="l">Santri Aktif</div></div>
+    <div class="stat-i"><div class="n"><%= stats.guru %></div><div class="l">Guru &amp; Musyrif</div></div>
+    <div class="stat-i"><div class="n">2</div><div class="l">Jenjang (SMP &amp; SMA)</div></div>
+    <div class="stat-i"><div class="n">30</div><div class="l">Juz Target Hafalan</div></div>
+  </div>
+</section>
+
+<!-- ===== PROFIL ===== -->
+<section class="sec" id="profil">
+  <div class="container">
+    <div class="center reveal" style="margin-bottom:44px;">
+      <span class="eyebrow">Tentang Kami</span>
+      <h2 class="h-title">Profil MBS Poncowati</h2>
+      <p class="lead">Lembaga pendidikan Islam yang memadukan kurikulum nasional dengan pendidikan kepesantrenan dalam lingkungan asrama yang kondusif.</p>
+    </div>
+    <div class="grid-3">
+      <div class="feature reveal"><div class="fi">🎯</div><h3>Visi</h3><p>Terwujudnya generasi Qur'ani yang beriman, berilmu, berakhlak mulia, dan mampu bersaing di era global.</p></div>
+      <div class="feature reveal"><div class="fi">📚</div><h3>Misi</h3><p>Menyelenggarakan pendidikan terpadu antara ilmu agama dan umum, membina hafalan Al-Quran, serta menanamkan kemandirian.</p></div>
+      <div class="feature reveal"><div class="fi">🌱</div><h3>Nilai</h3><p>Keikhlasan, kesederhanaan, kemandirian, ukhuwah islamiyah, dan kebebasan yang bertanggung jawab.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== JENJANG ===== -->
+<section class="sec" id="jenjang" style="background:#eef5f1;">
+  <div class="container">
+    <div class="center reveal" style="margin-bottom:44px;">
+      <span class="eyebrow">Jenjang Pendidikan</span>
+      <h2 class="h-title">Tersedia SMP &amp; SMA</h2>
+      <p class="lead">Dua jenjang pendidikan formal terakreditasi, keduanya terintegrasi penuh dengan program pondok pesantren.</p>
+    </div>
+    <div class="grid-2">
+      <div class="jenjang smp reveal">
+        <span class="big-emoji">🎓</span>
+        <span class="tag">Jenjang Menengah Pertama</span>
+        <h3>SMP MBS Poncowati</h3>
+        <p>Pendidikan tingkat SMP dengan kurikulum nasional dipadukan pembinaan tahfidz, bahasa Arab, dan pembentukan karakter santri sejak dini.</p>
+        <a href="/psb" class="btn btn-gold">Daftar SMP</a>
+      </div>
+      <div class="jenjang sma reveal">
+        <span class="big-emoji">🎓</span>
+        <span class="tag">Jenjang Menengah Atas</span>
+        <h3>SMA MBS Poncowati</h3>
+        <p>Pendidikan tingkat SMA yang mempersiapkan santri melanjutkan ke perguruan tinggi sekaligus menuntaskan target hafalan Al-Quran.</p>
+        <a href="/psb" class="btn btn-gold">Daftar SMA</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROGRAM ===== -->
+<section class="sec" id="program">
+  <div class="container">
+    <div class="center reveal" style="margin-bottom:44px;">
+      <span class="eyebrow">Keunggulan</span>
+      <h2 class="h-title">Program Unggulan</h2>
+    </div>
+    <div class="grid-2" style="gap:30px;">
+      <div class="prog reveal"><span class="pi">📖</span><div><h4>Tahfidz Al-Quran</h4><p>Program hafalan terstruktur dengan setoran ziyadah &amp; murojaah harian dibimbing musyrif, dipantau melalui SIAKAD.</p></div></div>
+      <div class="prog reveal"><span class="pi">🕌</span><div><h4>Pendidikan Kepesantrenan</h4><p>Bahasa Arab, fiqih, akidah akhlak, dan pembiasaan ibadah dalam lingkungan asrama 24 jam.</p></div></div>
+      <div class="prog reveal"><span class="pi">🏠</span><div><h4>Asrama Putra &amp; Putri</h4><p>Fasilitas asrama terpisah dengan pembina, pembagian kamar tertata, dan pembinaan karakter kemandirian.</p></div></div>
+      <div class="prog reveal"><span class="pi">🏆</span><div><h4>Prestasi Akademik</h4><p>Bimbingan intensif menuju prestasi olimpiade, ujian nasional, dan kelanjutan ke perguruan tinggi favorit.</p></div></div>
+      <div class="prog reveal"><span class="pi">💻</span><div><h4>Sistem Digital (SIAKAD)</h4><p>Jurnal mengajar, rekap tahfidz, dan administrasi santri terkelola digital dan transparan.</p></div></div>
+      <div class="prog reveal"><span class="pi">🤝</span><div><h4>Pembinaan Akhlak</h4><p>Keteladanan dan bimbingan harian untuk membentuk pribadi berakhlak mulia dan berjiwa pemimpin.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA PSB ===== -->
+<section class="sec">
+  <div class="container">
+    <div class="cta-psb reveal">
+      <h2>Penerimaan Santri Baru Dibuka! 🎉</h2>
+      <p>Bergabunglah bersama keluarga besar MBS Poncowati. Daftarkan putra-putri Anda menjadi generasi Qur'ani jenjang SMP &amp; SMA sekarang juga.</p>
+      <div class="row">
+        <a href="/psb" class="btn btn-gold">📝 Daftar Sekarang</a>
+        <a href="/psb/cek" class="btn btn-ghost">Cek Status Pendaftaran</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/foot') %>

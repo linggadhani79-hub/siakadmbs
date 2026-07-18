@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <h3 style="color:var(--green-dark); font-size:18px;">Detail Pendaftar</h3>
+  <a href="/pendaftar" class="btn btn-sm btn-muted">← Kembali</a>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 320px; gap:22px;">
+  <div class="card">
+    <div class="card-head">
+      <h3><%= p.no_reg %></h3>
+      <% const st = {'Baru':'tag-blue','Diterima':'tag-green','Ditolak':'tag-red'}[p.status]; %>
+      <span class="tag <%= st %>"><%= p.status==='Baru'?'Menunggu Verifikasi':p.status %></span>
+    </div>
+    <div class="card-body">
+      <table>
+        <tbody>
+          <tr><td class="muted" style="width:180px;">Nama Lengkap</td><td><strong><%= p.nama %></strong></td></tr>
+          <tr><td class="muted">Jenis Kelamin</td><td><%= p.jk==='L'?'Laki-laki':'Perempuan' %></td></tr>
+          <tr><td class="muted">Jenjang Dituju</td><td><%= p.jenjang %></td></tr>
+          <tr><td class="muted">Tempat, Tgl Lahir</td><td><%= p.tempat_lahir || '-' %><%= p.tgl_lahir ? ', '+p.tgl_lahir : '' %></td></tr>
+          <tr><td class="muted">Asal Sekolah</td><td><%= p.asal_sekolah || '-' %></td></tr>
+          <tr><td class="muted">Alamat</td><td><%= p.alamat || '-' %></td></tr>
+          <tr><td class="muted">Orang Tua / Wali</td><td><%= p.nama_ortu || '-' %></td></tr>
+          <tr><td class="muted">No. HP / WA</td><td><%= p.no_hp || '-' %></td></tr>
+          <tr><td class="muted">Email</td><td><%= p.email || '-' %></td></tr>
+          <tr><td class="muted">Catatan</td><td><%= p.catatan || '-' %></td></tr>
+          <tr><td class="muted">Tanggal Daftar</td><td><%= p.created_at %></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="align-self:start;">
+    <div class="card-head"><h3>Tindakan</h3></div>
+    <div class="card-body">
+      <% if (p.status === 'Diterima') { %>
+        <div class="flash flash-success" style="margin-bottom:14px;">Pendaftar telah <strong>diterima</strong> dan masuk ke data siswa.</div>
+        <% if (p.siswa_id) { %><a href="/siswa/<%= p.siswa_id %>" class="btn btn-block" style="margin-bottom:10px;">Lihat Data Siswa</a><% } %>
+      <% } else { %>
+        <p class="muted" style="margin-bottom:14px;">Setujui pendaftar untuk otomatis membuat data siswa, atau tolak pendaftaran.</p>
+        <form method="post" action="/pendaftar/<%= p.id %>/terima" onsubmit="return confirm('Terima pendaftar ini dan tambahkan ke data siswa?')" style="margin-bottom:10px;">
+          <button class="btn btn-block">✓ Terima &amp; Jadikan Siswa</button>
+        </form>
+        <form method="post" action="/pendaftar/<%= p.id %>/tolak" onsubmit="return confirm('Tolak pendaftar ini?')" style="margin-bottom:10px;">
+          <button class="btn btn-block btn-muted">Tolak Pendaftaran</button>
+        </form>
+      <% } %>
+      <% if (currentUser.role === 'admin') { %>
+        <form method="post" action="/pendaftar/<%= p.id %>?_method=DELETE" onsubmit="return confirm('Hapus data pendaftar ini secara permanen?')">
+          <button class="btn btn-block btn-danger">Hapus Data</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

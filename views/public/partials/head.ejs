@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'MBS Poncowati' %> · MBS Poncowati</title>
+  <meta name="description" content="Madrasah Berbasis Sekolah (MBS) Poncowati — Pondok Pesantren modern jenjang SMP & SMA dengan program tahfidz Al-Quran. Penerimaan Santri Baru (PSB) telah dibuka.">
+  <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+  <nav class="nav <%= locals.heroNav ? '' : 'scrolled' %>" id="nav">
+    <a href="/" class="brand">
+      <span class="logo">M</span>
+      <span><b>MBS Poncowati</b><br><small>Pondok Pesantren · SMP &amp; SMA</small></span>
+    </a>
+    <div class="links" id="navLinks">
+      <a href="/#profil" class="nl">Profil</a>
+      <a href="/#jenjang" class="nl">Jenjang</a>
+      <a href="/#program" class="nl">Program</a>
+      <a href="/psb/cek" class="nl">Cek Status</a>
+      <% if (user) { %>
+        <a href="/dashboard" class="btn btn-gold">Dashboard</a>
+      <% } else { %>
+        <a href="/login" class="nl">Login</a>
+      <% } %>
+      <a href="/psb" class="btn btn-gold">Daftar PSB</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </nav>

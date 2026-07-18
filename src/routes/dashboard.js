@@ -17,6 +17,9 @@ router.get('/', (req, res) => {
     setoranHariIni: db
       .prepare("SELECT COUNT(*) c FROM tahfidz WHERE tanggal = date('now','localtime')")
       .get().c,
+    pendaftarBaru: db
+      .prepare("SELECT COUNT(*) c FROM pendaftar WHERE status='Baru'")
+      .get().c,
   };
 
   const jurnalTerbaru = db

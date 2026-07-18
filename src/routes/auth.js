@@ -5,7 +5,7 @@ const db = require('../db');
 const router = express.Router();
 
 router.get('/login', (req, res) => {
-  if (req.session.user) return res.redirect('/');
+  if (req.session.user) return res.redirect('/dashboard');
   res.render('login', { error: null });
 });
 
@@ -26,7 +26,7 @@ router.post('/login', (req, res) => {
     role: user.role,
     ref_id: user.ref_id,
   };
-  res.redirect('/');
+  res.redirect('/dashboard');
 });
 
 router.get('/logout', (req, res) => {
