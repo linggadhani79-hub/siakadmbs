@@ -89,12 +89,28 @@ a { text-decoration: none; color: inherit; }
 .hero .jp { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); padding: 8px 14px; border-radius: 12px; font-weight: 600; font-size: 14px; }
 
 /* ===== 3D scene ===== */
-.scene { perspective: 1100px; display: grid; place-items: center; min-height: 440px; }
+.scene { perspective: 1100px; display: grid; place-items: center; min-height: 440px; animation: sceneIn 1s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes sceneIn { from { opacity: 0; transform: translateY(40px) scale(.9); } to { opacity: 1; transform: none; } }
 .stage {
   position: relative; width: 320px; height: 380px; transform-style: preserve-3d;
-  animation: floatY 6s ease-in-out infinite; transition: transform .2s ease-out;
+  animation: floatY 4.5s ease-in-out infinite; transition: transform .2s ease-out;
 }
-@keyframes floatY { 0%,100% { transform: translateY(0) rotateY(-14deg) rotateX(6deg); } 50% { transform: translateY(-18px) rotateY(-8deg) rotateX(9deg); } }
+@keyframes floatY {
+  0%   { transform: translateY(0)     rotateY(-15deg) rotateX(6deg); }
+  50%  { transform: translateY(-34px) rotateY(-7deg)  rotateX(11deg); }
+  100% { transform: translateY(0)     rotateY(-15deg) rotateX(6deg); }
+}
+/* Entrance teks hero */
+.hero-grid > div:first-child > * { animation: heroRise .75s cubic-bezier(.2,.7,.2,1) both; }
+.hero-grid > div:first-child > *:nth-child(1) { animation-delay: .05s; }
+.hero-grid > div:first-child > *:nth-child(2) { animation-delay: .13s; }
+.hero-grid > div:first-child > *:nth-child(3) { animation-delay: .21s; }
+.hero-grid > div:first-child > *:nth-child(4) { animation-delay: .29s; }
+.hero-grid > div:first-child > *:nth-child(5) { animation-delay: .37s; }
+@keyframes heroRise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .scene, .stage, .hero-grid > div:first-child > *, .chip3d, .orb { animation: none !important; }
+}
 
 .card3d {
   position: absolute; inset: 0; border-radius: 26px; transform-style: preserve-3d;
@@ -131,7 +147,7 @@ a { text-decoration: none; color: inherit; }
 .chip-a { top: 18px; right: -46px; transform: translateZ(60px); animation: floatChip 5s ease-in-out infinite; }
 .chip-b { bottom: 74px; left: -54px; transform: translateZ(90px); animation: floatChip 5.6s ease-in-out infinite .6s; }
 .chip-c { bottom: -18px; right: 20px; transform: translateZ(40px); animation: floatChip 4.6s ease-in-out infinite .3s; }
-@keyframes floatChip { 0%,100% { translate: 0 0; } 50% { translate: 0 -14px; } }
+@keyframes floatChip { 0%,100% { translate: 0 0; } 50% { translate: 0 -24px; } }
 
 .orb { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .5; z-index: 1; }
 .orb.o1 { width: 200px; height: 200px; background: radial-gradient(circle, var(--gold), transparent 70%); top: 8%; right: 12%; animation: floatY 9s ease-in-out infinite; }

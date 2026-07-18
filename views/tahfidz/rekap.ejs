@@ -15,7 +15,7 @@
           <td><%= i+1 %></td>
           <td><a href="/siswa/<%= r.id %>"><%= r.nama %></a></td>
           <td><%= r.kelas || '-' %></td>
-          <td><%= r.juz_tertinggi ? `<span class="tag tag-gold">Juz ${r.juz_tertinggi}</span>` : '<span class="muted">-</span>' %></td>
+          <td><% if (r.juz_tertinggi) { %><span class="tag tag-gold">Juz <%= r.juz_tertinggi %></span><% } else { %><span class="muted">-</span><% } %></td>
           <td><%= r.ziyadah %></td>
           <td><%= r.murojaah %></td>
           <td><%= r.terakhir || '-' %></td>

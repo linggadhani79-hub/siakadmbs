@@ -38,8 +38,8 @@
               <td><%= s.nis || '-' %></td>
               <td><a href="/siswa/<%= s.id %>"><%= s.nama %></a></td>
               <td><%= s.jk %></td>
-              <td><%= s.kelas_nama ? `<span class="tag tag-blue">${s.kelas_nama}</span>` : '<span class="muted">-</span>' %></td>
-              <td><%= s.kamar_nama || '<span class="muted">-</span>' %></td>
+              <td><% if (s.kelas_nama) { %><span class="tag tag-blue"><%= s.kelas_nama %></span><% } else { %><span class="muted">-</span><% } %></td>
+              <td><% if (s.kamar_nama) { %><%= s.kamar_nama %><% } else { %><span class="muted">-</span><% } %></td>
               <td class="actions">
                 <a href="/siswa/<%= s.id %>" class="btn btn-sm btn-muted">Detail</a>
                 <% if (['admin','guru','musyrif'].includes(currentUser.role)) { %>

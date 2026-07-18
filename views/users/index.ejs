@@ -14,7 +14,7 @@
           <td><%= u.username %></td>
           <td><%= u.nama %></td>
           <td><span class="tag <%= u.role==='admin'?'tag-gold':(u.role==='siswa'?'tag-gray':'tag-green') %>"><%= u.role %></span></td>
-          <td><%= u.aktif ? '<span class="tag tag-green">Aktif</span>' : '<span class="tag tag-red">Nonaktif</span>' %></td>
+          <td><%- u.aktif ? '<span class="tag tag-green">Aktif</span>' : '<span class="tag tag-red">Nonaktif</span>' %></td>
           <td class="actions">
             <form method="post" action="/users/<%= u.id %>/reset" onsubmit="this.password.value=prompt('Password baru untuk <%= u.username %>:')||''; return this.password.value.length>=4">
               <input type="hidden" name="password">

@@ -24,6 +24,24 @@
       <span>Menu</span>
     </button>
   </nav>
+
+  <script>
+    // Beri label kolom ke tiap sel agar tabel tampil sebagai kartu di mobile
+    (function () {
+      document.querySelectorAll('.table-wrap table').forEach(function (tbl) {
+        var ths = tbl.querySelectorAll('thead th');
+        if (!ths.length) return;
+        var labels = Array.prototype.map.call(ths, function (th) { return th.textContent.trim(); });
+        tbl.querySelectorAll('tbody tr').forEach(function (tr) {
+          var tds = tr.querySelectorAll('td');
+          if (tds.length === 1 && tds[0].hasAttribute('colspan')) return; // baris kosong/pesan
+          Array.prototype.forEach.call(tds, function (td, i) {
+            if (!td.hasAttribute('data-label')) td.setAttribute('data-label', labels[i] || '');
+          });
+        });
+      });
+    })();
+  </script>
 </div>
 </body>
 </html>

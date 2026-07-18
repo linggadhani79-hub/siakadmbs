@@ -20,7 +20,7 @@
           <td><span class="tag <%= kt %>"><%= b.kategori %></span></td>
           <td><%= b.penulis || '-' %></td>
           <td><%= (b.created_at || '').slice(0,10) %></td>
-          <td><%= b.publish ? '<span class="tag tag-green">Terbit</span>' : '<span class="tag tag-gray">Draf</span>' %></td>
+          <td><%- b.publish ? '<span class="tag tag-green">Terbit</span>' : '<span class="tag tag-gray">Draf</span>' %></td>
           <td class="actions">
             <a href="/kelola-berita/<%= b.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
             <form method="post" action="/kelola-berita/<%= b.id %>?_method=DELETE" onsubmit="return confirm('Hapus berita ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
