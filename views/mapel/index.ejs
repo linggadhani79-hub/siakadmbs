@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Mata Pelajaran</h3><p class="muted"><%= mapel.length %> mapel</p></div>
+  <a href="/mapel/tambah" class="btn btn-sm">+ Tambah</a>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Kode</th><th>Nama</th><th>Kelompok</th><th></th></tr></thead>
+    <tbody>
+      <% if (mapel.length===0){ %><tr><td colspan="4" class="empty">Belum ada data.</td></tr><% } %>
+      <% mapel.forEach(m => { %>
+        <tr>
+          <td><%= m.kode || '-' %></td>
+          <td><%= m.nama %></td>
+          <td><span class="tag <%= m.kelompok==='Kepesantrenan'?'tag-gold':'tag-gray' %>"><%= m.kelompok || '-' %></span></td>
+          <td class="actions">
+            <a href="/mapel/<%= m.id %>/edit" class="btn btn-sm btn-outline">Edit</a>
+            <form method="post" action="/mapel/<%= m.id %>?_method=DELETE" onsubmit="return confirm('Hapus mapel ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

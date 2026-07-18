@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:640px;">
+  <div class="card-head"><h3><%= title %></h3></div>
+  <div class="card-body">
+    <form method="post" action="<%= action %>">
+      <div class="form-grid">
+        <div class="form-row"><label>Username *</label><input type="text" name="username" required></div>
+        <div class="form-row"><label>Password *</label><input type="text" name="password" required></div>
+        <div class="form-row"><label>Nama Tampilan *</label><input type="text" name="nama" required></div>
+        <div class="form-row"><label>Role *</label>
+          <select name="role" id="role" onchange="toggleRef()" required>
+            <option value="admin">Admin</option>
+            <option value="guru">Guru</option>
+            <option value="musyrif">Musyrif</option>
+            <option value="siswa">Siswa</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row" id="refGuru">
+        <label>Tautkan ke Guru/Musyrif</label>
+        <select name="ref_id"><option value="">- Tidak ditautkan -</option><% guru.forEach(g => { %><option value="<%= g.id %>"><%= g.nama %></option><% }) %></select>
+      </div>
+      <div class="form-row" id="refSiswa" style="display:none;">
+        <label>Tautkan ke Siswa</label>
+        <select name="ref_id_siswa"><option value="">- Tidak ditautkan -</option><% siswa.forEach(s => { %><option value="<%= s.id %>"><%= s.nama %></option><% }) %></select>
+      </div>
+      <div class="form-actions"><button class="btn">Simpan</button><a href="/users" class="btn btn-muted">Batal</a></div>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleRef(){
+  var role=document.getElementById('role').value;
+  var g=document.getElementById('refGuru'), s=document.getElementById('refSiswa');
+  var gSel=g.querySelector('select'), sSel=s.querySelector('select');
+  if(role==='siswa'){ s.style.display='block'; g.style.display='none'; gSel.name=''; sSel.name='ref_id'; }
+  else if(role==='admin'){ s.style.display='none'; g.style.display='none'; gSel.name=''; sSel.name=''; }
+  else { g.style.display='block'; s.style.display='none'; gSel.name='ref_id'; sSel.name=''; }
+}
+toggleRef();
+</script>
+
+<%- include('../partials/footer') %>

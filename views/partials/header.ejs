@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== 'undefined' ? title : 'SIAKAD' %> · MBS Poncowati</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app">
+  <% const role = currentUser.role; %>
+  <aside class="sidebar">
+    <div class="head">
+      <div class="logo">M</div>
+      <div>
+        <div class="t">SIAKAD MBS</div>
+        <div class="s">Poncowati</div>
+      </div>
+    </div>
+    <div class="nav-section">Utama</div>
+    <nav>
+      <a href="/" class="<%= path === '/' ? 'active' : '' %>"><span class="ic">🏠</span><span>Dashboard</span></a>
+      <a href="/jurnal" class="<%= path.startsWith('/jurnal') ? 'active' : '' %>"><span class="ic">📓</span><span>Jurnal Mengajar</span></a>
+      <a href="/tahfidz" class="<%= path.startsWith('/tahfidz') ? 'active' : '' %>"><span class="ic">📖</span><span>Tahfidz Quran</span></a>
+      <a href="/kamar" class="<%= path.startsWith('/kamar') ? 'active' : '' %>"><span class="ic">🛏️</span><span>Pembagian Kamar</span></a>
+    </nav>
+    <% if (role === 'admin' || role === 'guru' || role === 'musyrif') { %>
+      <div class="nav-section">Data Master</div>
+      <nav>
+        <a href="/siswa" class="<%= path.startsWith('/siswa') ? 'active' : '' %>"><span class="ic">🧑‍🎓</span><span>Data Siswa</span></a>
+        <% if (role === 'admin') { %>
+        <a href="/guru" class="<%= path.startsWith('/guru') ? 'active' : '' %>"><span class="ic">🧑‍🏫</span><span>Guru & Musyrif</span></a>
+        <a href="/kelas" class="<%= path.startsWith('/kelas') ? 'active' : '' %>"><span class="ic">🏫</span><span>Kelas</span></a>
+        <a href="/mapel" class="<%= path.startsWith('/mapel') ? 'active' : '' %>"><span class="ic">📚</span><span>Mata Pelajaran</span></a>
+        <a href="/asrama" class="<%= path.startsWith('/asrama') ? 'active' : '' %>"><span class="ic">🏢</span><span>Asrama & Kamar</span></a>
+        <% } %>
+      </nav>
+    <% } %>
+    <% if (role === 'admin') { %>
+      <div class="nav-section">Sistem</div>
+      <nav>
+        <a href="/users" class="<%= path.startsWith('/users') ? 'active' : '' %>"><span class="ic">👥</span><span>Pengguna</span></a>
+      </nav>
+    <% } %>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <h2><%= typeof title !== 'undefined' ? title : 'SIAKAD' %></h2>
+      <div class="user">
+        <span><%= currentUser.nama %></span>
+        <span class="badge"><%= currentUser.role %></span>
+        <a href="/logout" class="btn btn-sm btn-muted">Keluar</a>
+      </div>
+    </div>
+    <div class="content">
+      <% if (flash) { %>
+        <div class="flash flash-<%= flash.type %>"><%= flash.msg %></div>
+      <% } %>

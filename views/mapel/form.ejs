@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:560px;">
+  <div class="card-head"><h3><%= title %></h3></div>
+  <div class="card-body">
+    <form method="post" action="<%= action %>">
+      <div class="form-grid">
+        <div class="form-row"><label>Kode</label><input type="text" name="kode" value="<%= mapel.kode || '' %>"></div>
+        <div class="form-row"><label>Kelompok</label>
+          <select name="kelompok"><option value="Umum" <%= mapel.kelompok==='Umum'?'selected':'' %>>Umum</option><option value="Kepesantrenan" <%= mapel.kelompok==='Kepesantrenan'?'selected':'' %>>Kepesantrenan</option></select>
+        </div>
+      </div>
+      <div class="form-row"><label>Nama Mapel *</label><input type="text" name="nama" value="<%= mapel.nama || '' %>" required></div>
+      <div class="form-actions"><button class="btn">Simpan</button><a href="/mapel" class="btn btn-muted">Batal</a></div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

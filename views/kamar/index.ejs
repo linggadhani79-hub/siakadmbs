@@ -1,0 +1,76 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Pembagian Kamar Asrama</h3><p class="muted">Penempatan santri ke kamar sesuai gender &amp; kapasitas</p></div>
+</div>
+
+<% if (canManage && belumDitempatkan.length > 0) { %>
+  <div class="card">
+    <div class="card-head"><h3>⚠️ Santri Belum Ditempatkan (<%= belumDitempatkan.length %>)</h3></div>
+    <div class="card-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nama</th><th>JK</th><th>Kelas</th><th>Tempatkan ke Kamar</th></tr></thead>
+          <tbody>
+            <% belumDitempatkan.forEach(s => { %>
+              <tr>
+                <td><%= s.nama %></td>
+                <td><%= s.jk %></td>
+                <td><%= s.kelas || '-' %></td>
+                <td>
+                  <form method="post" action="/kamar/tempatkan" style="display:flex; gap:8px;">
+                    <input type="hidden" name="siswa_id" value="<%= s.id %>">
+                    <select name="kamar_id" required style="max-width:280px;">
+                      <option value="">- Pilih kamar -</option>
+                      <% kamarData.filter(a => (s.jk==='L'&&a.gender==='Putra')||(s.jk==='P'&&a.gender==='Putri')).forEach(a => { %>
+                        <optgroup label="<%= a.nama %> (<%= a.gender %>)">
+                          <% a.kamar.forEach(k => { const sisa = k.kapasitas - k.penghuni.length; %>
+                            <option value="<%= k.id %>" <%= sisa<=0?'disabled':'' %>><%= k.nama %> (sisa <%= sisa %>)</option>
+                          <% }) %>
+                        </optgroup>
+                      <% }) %>
+                    </select>
+                    <button class="btn btn-sm">Tempatkan</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+<% } %>
+
+<% kamarData.forEach(a => { %>
+  <h3 style="color:var(--green-dark); margin:18px 0 12px;"><%= a.nama %> <span class="tag <%= a.gender==='Putra'?'tag-blue':'tag-red' %>"><%= a.gender %></span> <span class="muted" style="font-weight:400;">· Pembina: <%= a.pembina || '-' %></span></h3>
+  <div class="kamar-grid">
+    <% a.kamar.forEach(k => { const sisa = k.kapasitas - k.penghuni.length; %>
+      <div class="kamar-card">
+        <div class="kh">
+          <span class="knm"><%= k.nama %></span>
+          <span class="tag <%= sisa>0?'tag-green':'tag-red' %>"><%= k.penghuni.length %>/<%= k.kapasitas %></span>
+        </div>
+        <ul>
+          <% k.penghuni.forEach(p => { %>
+            <li>
+              <span><%= p.nama %> <span class="muted">· <%= p.kelas || '-' %></span></span>
+              <% if (canManage) { %>
+                <form method="post" action="/kamar/keluarkan" onsubmit="return confirm('Keluarkan santri dari kamar?')">
+                  <input type="hidden" name="siswa_id" value="<%= p.id %>">
+                  <button class="btn btn-sm btn-danger" style="padding:2px 8px;">×</button>
+                </form>
+              <% } %>
+            </li>
+          <% }) %>
+          <% if (k.penghuni.length===0){ %><li><span class="muted">Kosong</span></li><% } %>
+        </ul>
+      </div>
+    <% }) %>
+    <% if (a.kamar.length===0){ %><p class="muted">Belum ada kamar di asrama ini.</p><% } %>
+  </div>
+<% }) %>
+
+<% if (kamarData.length===0){ %><div class="card"><div class="empty">Belum ada data asrama. Tambahkan melalui menu Asrama &amp; Kamar.</div></div><% } %>
+
+<%- include('../partials/footer') %>
