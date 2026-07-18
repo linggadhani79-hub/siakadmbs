@@ -51,6 +51,33 @@ router.get('/', (req, res) => {
     )
     .all();
 
+  // Kehadiran 7 hari terakhir (untuk mini bar chart)
+  const absensiRows = db
+    .prepare(
+      `SELECT tanggal,
+              SUM(CASE WHEN status='Hadir' THEN 1 ELSE 0 END) hadir,
+              COUNT(*) total
+       FROM absensi
+       WHERE tanggal >= date('now','localtime','-6 day')
+       GROUP BY tanggal`
+    )
+    .all();
+  const absensiMap = {};
+  absensiRows.forEach((r) => { absensiMap[r.tanggal] = r; });
+  const HARI_ID = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+  const kehadiran7 = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86400000);
+    const key = d.toISOString().slice(0, 10);
+    const row = absensiMap[key];
+    kehadiran7.push({
+      label: HARI_ID[d.getDay()],
+      hadir: row ? row.hadir : 0,
+      total: row ? row.total : 0,
+    });
+  }
+  const maxHadir = Math.max(1, ...kehadiran7.map((k) => k.hadir));
+
   // Top penghafal (jumlah ziyadah tercatat)
   const topTahfidz = db
     .prepare(
@@ -69,6 +96,8 @@ router.get('/', (req, res) => {
     tahfidzTerbaru,
     hunian,
     topTahfidz,
+    kehadiran7,
+    maxHadir,
     today: new Date().toLocaleDateString('id-ID', {
       weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
     }),

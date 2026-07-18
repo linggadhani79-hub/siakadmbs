@@ -12,6 +12,21 @@
   <a href="/pendaftar?status=Baru" class="stat" style="text-decoration:none;"><div class="ic">📝</div><div><div class="n"><%= stats.pendaftarBaru %></div><div class="l">Pendaftar Baru (PSB)</div></div></a>
 </div>
 
+<div class="card">
+  <div class="card-head"><h3>📊 Kehadiran Santri — 7 Hari Terakhir</h3><a href="/absensi" class="btn btn-sm btn-outline">Input Absensi</a></div>
+  <div class="card-body">
+    <div class="bars">
+      <% kehadiran7.forEach(k => { const h = Math.round(k.hadir / maxHadir * 100); %>
+        <div class="b">
+          <span class="v"><%= k.hadir %><% if (k.total) { %><span class="muted" style="font-weight:400;">/<%= k.total %></span><% } %></span>
+          <div class="col <%= k.hadir === 0 ? 'empty-col' : '' %>" style="height:<%= Math.max(4, h) %>%;" title="Hadir <%= k.hadir %> dari <%= k.total %> tercatat"></div>
+          <span class="d"><%= k.label %></span>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:22px;">
   <div class="card">
     <div class="card-head"><h3>📓 Jurnal Mengajar Terbaru</h3><a href="/jurnal" class="btn btn-sm btn-outline">Lihat Semua</a></div>
