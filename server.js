@@ -48,6 +48,8 @@ app.use('/kelas', requireLogin, require('./src/routes/kelas'));
 app.use('/mapel', requireLogin, require('./src/routes/mapel'));
 app.use('/asrama', requireLogin, require('./src/routes/asrama'));
 app.use('/kamar', requireLogin, require('./src/routes/kamar'));
+app.use('/jadwal', requireLogin, require('./src/routes/jadwal'));
+app.use('/absensi', requireLogin, require('./src/routes/absensi'));
 app.use('/jurnal', requireLogin, require('./src/routes/jurnal'));
 app.use('/tahfidz', requireLogin, require('./src/routes/tahfidz'));
 app.use('/users', requireLogin, require('./src/routes/users'));

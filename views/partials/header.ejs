@@ -21,6 +21,8 @@
     <div class="nav-section">Utama</div>
     <nav>
       <a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>"><span class="ic">🏠</span><span>Dashboard</span></a>
+      <a href="/jadwal" class="<%= path.startsWith('/jadwal') ? 'active' : '' %>"><span class="ic">🗓️</span><span>Jadwal Pelajaran</span></a>
+      <a href="/absensi" class="<%= path.startsWith('/absensi') ? 'active' : '' %>"><span class="ic">✅</span><span>Absensi Harian</span></a>
       <a href="/jurnal" class="<%= path.startsWith('/jurnal') ? 'active' : '' %>"><span class="ic">📓</span><span>Jurnal Mengajar</span></a>
       <a href="/tahfidz" class="<%= path.startsWith('/tahfidz') ? 'active' : '' %>"><span class="ic">📖</span><span>Tahfidz Quran</span></a>
       <a href="/kamar" class="<%= path.startsWith('/kamar') ? 'active' : '' %>"><span class="ic">🛏️</span><span>Pembagian Kamar</span></a>

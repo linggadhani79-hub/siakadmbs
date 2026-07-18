@@ -152,6 +152,27 @@ textarea { resize: vertical; min-height: 70px; }
 .muted { color: var(--muted); font-size: 13px; }
 .progress { background: #eef1ef; border-radius: 20px; height: 8px; overflow: hidden; }
 .progress > span { display: block; height: 100%; background: var(--green); }
+/* Timetable jadwal */
+.timetable { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.tt-day { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+.tt-day .dh { background: var(--green-dark); color: #fff; padding: 10px 14px; font-weight: 700; font-size: 14px; text-align: center; }
+.tt-day .slot { padding: 11px 14px; border-bottom: 1px solid var(--border); }
+.tt-day .slot:last-child { border-bottom: none; }
+.tt-day .slot .jam { font-size: 12px; color: var(--muted); font-weight: 600; }
+.tt-day .slot .mp { font-weight: 600; color: var(--green-dark); font-size: 14px; margin-top: 2px; }
+.tt-day .slot .gr { font-size: 12px; color: var(--muted); }
+.tt-day .empty-slot { padding: 20px 14px; text-align: center; color: var(--muted); font-size: 13px; }
+
+/* Absensi status pills */
+.absen-row td { padding: 8px 16px; }
+.status-opts { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.status-opts label { display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--border); cursor: pointer; font-size: 13px; font-weight: 600; margin: 0; transition: .15s; }
+.status-opts input { display: none; }
+.status-opts label:has(input:checked).h { background: #e6f4ea; border-color: #1c6b3a; color: #1c6b3a; }
+.status-opts label:has(input:checked).s { background: #fff4e0; border-color: #a8760f; color: #a8760f; }
+.status-opts label:has(input:checked).i { background: #e5eff7; border-color: #1d5b86; color: #1d5b86; }
+.status-opts label:has(input:checked).a { background: #fbe7e4; border-color: #b3311f; color: #b3311f; }
+
 .error-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; }
 .error-page .box { background: var(--card); padding: 40px; border-radius: 12px; box-shadow: var(--shadow); max-width: 440px; }
 .error-page h1 { font-size: 22px; color: var(--green-dark); margin-bottom: 10px; }

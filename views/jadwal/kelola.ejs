@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Kelola Jadwal — <%= kelas.nama %></h3><p class="muted">Tambah atau hapus slot jadwal pelajaran</p></div>
+  <a href="/jadwal?kelas_id=<%= kelas.id %>" class="btn btn-sm btn-muted">← Lihat Timetable</a>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Tambah Slot Jadwal</h3></div>
+  <div class="card-body">
+    <form method="post" action="/jadwal/kelola/<%= kelas.id %>">
+      <div class="form-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="form-row"><label>Hari *</label>
+          <select name="hari" required><% HARI.forEach(h => { %><option value="<%= h %>"><%= h %></option><% }) %></select>
+        </div>
+        <div class="form-row"><label>Jam Mulai *</label><input type="time" name="jam_mulai" value="07:00" required></div>
+        <div class="form-row"><label>Jam Selesai *</label><input type="time" name="jam_selesai" value="08:30" required></div>
+        <div class="form-row"><label>Mata Pelajaran *</label>
+          <select name="mapel_id" required><% mapel.forEach(m => { %><option value="<%= m.id %>"><%= m.nama %></option><% }) %></select>
+        </div>
+        <div class="form-row"><label>Guru</label>
+          <select name="guru_id"><option value="">- Pilih -</option><% guru.forEach(g => { %><option value="<%= g.id %>"><%= g.nama %></option><% }) %></select>
+        </div>
+        <div class="form-row" style="display:flex; align-items:flex-end;"><button class="btn btn-block">+ Tambah</button></div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Daftar Slot (<%= list.length %>)</h3></div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Hari</th><th>Jam</th><th>Mapel</th><th>Guru</th><th></th></tr></thead>
+      <tbody>
+        <% if (list.length===0){ %><tr><td colspan="5" class="empty">Belum ada jadwal.</td></tr><% } %>
+        <% list.forEach(j => { %>
+          <tr>
+            <td><span class="tag tag-green"><%= j.hari %></span></td>
+            <td><%= j.jam_mulai %>–<%= j.jam_selesai %></td>
+            <td><%= j.mapel %></td>
+            <td><%= j.guru || '-' %></td>
+            <td><form method="post" action="/jadwal/<%= j.id %>?_method=DELETE" onsubmit="return confirm('Hapus slot ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,57 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Jadwal Pelajaran</h3><p class="muted">Jadwal kegiatan belajar mengajar per kelas</p></div>
+  <% if (!lockKelas) { %>
+  <form method="get" class="filters" style="display:flex; gap:8px;">
+    <select name="kelas_id" onchange="this.form.submit()">
+      <% kelasList.forEach(k => { %>
+        <option value="<%= k.id %>" <%= kelas && String(kelas.id)===String(k.id)?'selected':'' %>><%= k.nama %> (<%= k.jenjang %>)</option>
+      <% }) %>
+    </select>
+    <% if (canManage && kelas) { %><a href="/jadwal/kelola/<%= kelas.id %>" class="btn btn-sm">⚙️ Kelola</a><% } %>
+  </form>
+  <% } %>
+</div>
+
+<% if (jadwalGuru) { %>
+  <div class="card">
+    <div class="card-head"><h3>📋 Jadwal Mengajar Saya</h3></div>
+    <div class="card-body p0"><div class="table-wrap">
+      <table>
+        <thead><tr><th>Hari</th><th>Jam</th><th>Kelas</th><th>Mata Pelajaran</th></tr></thead>
+        <tbody>
+          <% if (jadwalGuru.length===0){ %><tr><td colspan="4" class="empty">Belum ada jadwal mengajar.</td></tr><% } %>
+          <% jadwalGuru.forEach(j => { %>
+            <tr><td><span class="tag tag-green"><%= j.hari %></span></td><td><%= j.jam_mulai %>–<%= j.jam_selesai %></td><td><span class="tag tag-blue"><%= j.kelas %></span></td><td><%= j.mapel %></td></tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div></div>
+  </div>
+<% } %>
+
+<% if (kelas) { %>
+  <h3 style="color:var(--green-dark); margin:6px 0 14px;">Jadwal Kelas <%= kelas.nama %> <span class="tag tag-blue"><%= kelas.jenjang %></span></h3>
+  <div class="timetable">
+    <% HARI.forEach(h => { %>
+      <div class="tt-day">
+        <div class="dh"><%= h %></div>
+        <% if ((grid[h]||[]).length === 0) { %>
+          <div class="empty-slot">—</div>
+        <% } %>
+        <% (grid[h]||[]).forEach(s => { %>
+          <div class="slot">
+            <div class="jam">🕐 <%= s.jam_mulai %>–<%= s.jam_selesai %></div>
+            <div class="mp"><%= s.mapel %></div>
+            <div class="gr"><%= s.guru || 'Guru belum ditentukan' %></div>
+          </div>
+        <% }) %>
+      </div>
+    <% }) %>
+  </div>
+<% } else { %>
+  <div class="card"><div class="empty">Belum ada kelas. Tambahkan kelas terlebih dahulu.</div></div>
+<% } %>
+
+<%- include('../partials/footer') %>

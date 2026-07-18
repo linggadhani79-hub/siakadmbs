@@ -144,6 +144,28 @@ function migrate() {
       publish    INTEGER NOT NULL DEFAULT 1,
       created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
+
+    CREATE TABLE IF NOT EXISTS jadwal (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      kelas_id    INTEGER NOT NULL REFERENCES kelas(id) ON DELETE CASCADE,
+      hari        TEXT NOT NULL CHECK(hari IN ('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu')),
+      jam_mulai   TEXT NOT NULL,
+      jam_selesai TEXT NOT NULL,
+      mapel_id    INTEGER NOT NULL REFERENCES mapel(id) ON DELETE CASCADE,
+      guru_id     INTEGER REFERENCES guru(id) ON DELETE SET NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS absensi (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      tanggal     TEXT NOT NULL,
+      kelas_id    INTEGER NOT NULL REFERENCES kelas(id) ON DELETE CASCADE,
+      siswa_id    INTEGER NOT NULL REFERENCES siswa(id) ON DELETE CASCADE,
+      status      TEXT NOT NULL DEFAULT 'Hadir' CHECK(status IN ('Hadir','Sakit','Izin','Alpa')),
+      keterangan  TEXT,
+      dicatat_oleh TEXT,
+      created_at  TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+      UNIQUE(tanggal, siswa_id)
+    );
   `);
 }
 

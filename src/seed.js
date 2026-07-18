@@ -162,3 +162,32 @@ function seedBerita() {
   console.log('Seeding berita selesai.');
 }
 seedBerita();
+
+// Seed jadwal pelajaran contoh untuk kelas 7A
+function seedJadwal() {
+  if (count('jadwal') > 0) return;
+  const kelas = db.prepare("SELECT id FROM kelas WHERE nama='7A'").get();
+  if (!kelas) return;
+  const mapel = (nm) => (db.prepare('SELECT id FROM mapel WHERE nama=?').get(nm) || {}).id || null;
+  const guru = (like) => (db.prepare('SELECT id FROM guru WHERE nama LIKE ?').get(`%${like}%`) || {}).id || null;
+  const ins = db.prepare(
+    'INSERT INTO jadwal (kelas_id,hari,jam_mulai,jam_selesai,mapel_id,guru_id) VALUES (?,?,?,?,?,?)'
+  );
+  const rows = [
+    ['Senin', '07:00', '08:30', 'Matematika', 'Aminah'],
+    ['Senin', '08:30', '10:00', 'Bahasa Arab', 'Ridwan'],
+    ['Senin', '10:15', '11:45', 'Tahfidz Al-Quran', 'Khadijah'],
+    ['Selasa', '07:00', '08:30', 'Ilmu Pengetahuan Alam', 'Fatimah'],
+    ['Selasa', '08:30', '10:00', 'Bahasa Inggris', 'Abdullah'],
+    ['Rabu', '07:00', '08:30', 'Tahfidz Al-Quran', 'Yusuf'],
+    ['Rabu', '08:30', '10:00', 'Fiqih', 'Ridwan'],
+    ['Kamis', '07:00', '08:30', 'Bahasa Indonesia', 'Aminah'],
+    ['Jumat', '07:00', '08:30', 'Akidah Akhlak', 'Fauzi'],
+  ];
+  const tx = db.transaction(() =>
+    rows.forEach((r) => ins.run(kelas.id, r[0], r[1], r[2], mapel(r[3]), guru(r[4])))
+  );
+  tx();
+  console.log('Seeding jadwal selesai.');
+}
+seedJadwal();

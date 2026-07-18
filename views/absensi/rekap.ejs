@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Rekap Absensi Bulanan</h3><p class="muted">Rekapitulasi kehadiran per santri</p></div>
+  <div class="filters">
+    <form method="get" style="display:flex; gap:8px;">
+      <% if (!lockKelas) { %>
+      <select name="kelas_id" onchange="this.form.submit()">
+        <% kelasList.forEach(k => { %><option value="<%= k.id %>" <%= kelasId===k.id?'selected':'' %>><%= k.nama %></option><% }) %>
+      </select>
+      <% } else if (kelasId) { %><input type="hidden" name="kelas_id" value="<%= kelasId %>"><% } %>
+      <input type="month" name="bulan" value="<%= bulan %>" onchange="this.form.submit()">
+    </form>
+    <a href="/absensi<%= kelasId ? '?kelas_id='+kelasId : '' %>" class="btn btn-sm btn-muted">← Input Absensi</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Rekap <%= kelas ? kelas.nama : '' %> · <%= bulan %></h3></div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Santri</th><th>Hadir</th><th>Sakit</th><th>Izin</th><th>Alpa</th><th>Total Tercatat</th></tr></thead>
+      <tbody>
+        <% if (rekap.length===0){ %><tr><td colspan="7" class="empty">Belum ada data.</td></tr><% } %>
+        <% rekap.forEach((r,i) => { const total = (r.hadir||0)+(r.sakit||0)+(r.izin||0)+(r.alpa||0); %>
+          <tr>
+            <td><%= i+1 %></td>
+            <td><%= r.nama %></td>
+            <td><span class="tag tag-green"><%= r.hadir || 0 %></span></td>
+            <td><span class="tag tag-gold"><%= r.sakit || 0 %></span></td>
+            <td><span class="tag tag-blue"><%= r.izin || 0 %></span></td>
+            <td><span class="tag tag-red"><%= r.alpa || 0 %></span></td>
+            <td><%= total %> hari</td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<%- include('../partials/footer') %>

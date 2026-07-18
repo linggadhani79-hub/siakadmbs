@@ -1,0 +1,76 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Absensi Harian</h3><p class="muted">Pencatatan kehadiran santri per kelas</p></div>
+  <div class="filters">
+    <a href="/absensi/rekap<%= kelasId ? '?kelas_id='+kelasId : '' %>" class="btn btn-sm btn-outline">📊 Rekap Bulanan</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <h3>Daftar Hadir</h3>
+    <form method="get" class="filters" style="display:flex; gap:8px;">
+      <% if (currentUser.role !== 'siswa') { %>
+      <select name="kelas_id" onchange="this.form.submit()">
+        <% kelasList.forEach(k => { %><option value="<%= k.id %>" <%= kelasId===k.id?'selected':'' %>><%= k.nama %></option><% }) %>
+      </select>
+      <% } else if (kelasId) { %><input type="hidden" name="kelas_id" value="<%= kelasId %>"><% } %>
+      <input type="date" name="tanggal" value="<%= tanggal %>" onchange="this.form.submit()">
+    </form>
+  </div>
+  <div class="card-body">
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+      <span class="tag tag-green">Hadir: <%= rekap.Hadir %></span>
+      <span class="tag tag-gold">Sakit: <%= rekap.Sakit %></span>
+      <span class="tag tag-blue">Izin: <%= rekap.Izin %></span>
+      <span class="tag tag-red">Alpa: <%= rekap.Alpa %></span>
+      <span class="tag tag-gray">Belum diisi: <%= rekap.belum %></span>
+    </div>
+
+    <% if (siswa.length === 0) { %>
+      <p class="empty">Belum ada santri aktif di kelas ini.</p>
+    <% } else { %>
+    <form method="post" action="/absensi">
+      <input type="hidden" name="kelas_id" value="<%= kelasId %>">
+      <input type="hidden" name="tanggal" value="<%= tanggal %>">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th style="width:40px;">#</th><th>Santri</th><th>Status Kehadiran</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <% siswa.forEach((s, i) => { const cur = s.status || 'Hadir'; %>
+              <tr class="absen-row">
+                <td><%= i+1 %></td>
+                <td><%= s.nama %><br><span class="muted"><%= s.nis || '' %></span></td>
+                <td>
+                  <% if (canManage) { %>
+                    <div class="status-opts">
+                      <label class="h"><input type="radio" name="status[s<%= s.id %>]" value="Hadir" <%= cur==='Hadir'?'checked':'' %>> Hadir</label>
+                      <label class="s"><input type="radio" name="status[s<%= s.id %>]" value="Sakit" <%= cur==='Sakit'?'checked':'' %>> Sakit</label>
+                      <label class="i"><input type="radio" name="status[s<%= s.id %>]" value="Izin" <%= cur==='Izin'?'checked':'' %>> Izin</label>
+                      <label class="a"><input type="radio" name="status[s<%= s.id %>]" value="Alpa" <%= cur==='Alpa'?'checked':'' %>> Alpa</label>
+                    </div>
+                  <% } else { %>
+                    <% const t = {'Hadir':'tag-green','Sakit':'tag-gold','Izin':'tag-blue','Alpa':'tag-red'}[s.status] || 'tag-gray'; %>
+                    <span class="tag <%= t %>"><%= s.status || 'Belum diisi' %></span>
+                  <% } %>
+                </td>
+                <td>
+                  <% if (canManage) { %>
+                    <input type="text" name="keterangan[s<%= s.id %>]" value="<%= s.keterangan || '' %>" placeholder="opsional">
+                  <% } else { %><%= s.keterangan || '-' %><% } %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% if (canManage) { %>
+        <div style="margin-top:16px;"><button class="btn">💾 Simpan Absensi</button></div>
+      <% } %>
+    </form>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
