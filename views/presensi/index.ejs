@@ -1,0 +1,146 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Presensi Staff</h3><p class="muted">Absen masuk/pulang dengan verifikasi GPS &amp; foto wajah</p></div>
+  <div class="filters">
+    <a href="/presensi/riwayat" class="btn btn-sm btn-outline">🗓️ Riwayat Saya</a>
+    <% if (currentUser.role === 'admin') { %>
+      <a href="/presensi/rekap" class="btn btn-sm btn-outline">📊 Rekap Staff</a>
+      <a href="/presensi/lokasi" class="btn btn-sm btn-outline">📍 Titik Lokasi</a>
+    <% } %>
+  </div>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:22px;">
+  <div class="card">
+    <div class="card-head"><h3>📸 Ambil Foto &amp; Lokasi</h3></div>
+    <div class="card-body">
+      <div style="position:relative; border-radius:14px; overflow:hidden; background:#0f1f19; aspect-ratio:4/3;">
+        <video id="video" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover; transform:scaleX(-1);"></video>
+        <canvas id="canvas" style="display:none; width:100%; height:100%; object-fit:cover; position:absolute; inset:0;"></canvas>
+        <div id="camMsg" style="position:absolute; inset:0; display:none; place-items:center; color:#fff; text-align:center; padding:20px; font-size:14px;"></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+        <button type="button" id="btnFoto" class="btn" style="flex:1;">📷 Ambil Foto</button>
+        <button type="button" id="btnUlang" class="btn btn-muted" style="flex:1; display:none;">🔄 Ulangi</button>
+      </div>
+      <div id="gpsInfo" class="hint" style="margin-top:14px;">📡 Mencari sinyal GPS... pastikan izin lokasi diaktifkan.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>🕒 Status Hari Ini</h3></div>
+    <div class="card-body">
+      <% if (hariIni) { %>
+        <div class="stat" style="margin-bottom:12px;">
+          <div class="ic">🟢</div>
+          <div><div class="n" style="font-size:20px;"><%= hariIni.jam_masuk %></div>
+          <div class="l">Masuk · <span class="tag <%= hariIni.status==='Terlambat'?'tag-red':'tag-green' %>"><%= hariIni.status %></span> · <%= hariIni.jarak_masuk %> m dari titik lokasi</div></div>
+        </div>
+        <% if (hariIni.jam_pulang) { %>
+          <div class="stat">
+            <div class="ic">🏁</div>
+            <div><div class="n" style="font-size:20px;"><%= hariIni.jam_pulang %></div>
+            <div class="l">Pulang · <%= hariIni.jarak_pulang %> m dari titik lokasi</div></div>
+          </div>
+          <div class="flash flash-success" style="margin-top:16px;">Presensi hari ini lengkap. Barakallahu fiik! 🎉</div>
+        <% } else { %>
+          <form method="post" action="/presensi/pulang" class="fPresensi" style="margin-top:16px;">
+            <input type="hidden" name="lat"><input type="hidden" name="lng"><input type="hidden" name="foto">
+            <button class="btn btn-block">🏁 Presensi Pulang</button>
+          </form>
+        <% } %>
+      <% } else { %>
+        <p class="muted" style="margin-bottom:14px;">Anda belum presensi hari ini. Ambil foto wajah, pastikan GPS aktif, lalu tekan tombol di bawah. Batas tepat waktu: <strong><%= batas %></strong>.</p>
+        <form method="post" action="/presensi/masuk" class="fPresensi">
+          <input type="hidden" name="lat"><input type="hidden" name="lng"><input type="hidden" name="foto">
+          <button class="btn btn-block">🟢 Presensi Masuk</button>
+        </form>
+      <% } %>
+
+      <div style="margin-top:20px;">
+        <h4 style="color:var(--green-dark); font-size:14px; margin-bottom:8px;">📍 Titik Lokasi Aktif</h4>
+        <% if (lokasi.length === 0) { %>
+          <p class="muted">Belum ada titik lokasi. Hubungi admin.</p>
+        <% } %>
+        <% lokasi.forEach(l => { %>
+          <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border); font-size:13.5px;">
+            <span><%= l.nama %></span><span class="muted">radius <%= l.radius_m %> m</span>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var video = document.getElementById('video');
+  var canvas = document.getElementById('canvas');
+  var camMsg = document.getElementById('camMsg');
+  var btnFoto = document.getElementById('btnFoto');
+  var btnUlang = document.getElementById('btnUlang');
+  var gpsInfo = document.getElementById('gpsInfo');
+  var fotoData = '';
+  var pos = null;
+  var stream = null;
+
+  // Kamera depan
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 } }, audio: false })
+      .then(function (s) { stream = s; video.srcObject = s; })
+      .catch(function () {
+        camMsg.style.display = 'grid';
+        camMsg.textContent = '⚠️ Kamera tidak dapat diakses. Izinkan akses kamera di browser Anda.';
+      });
+  } else {
+    camMsg.style.display = 'grid';
+    camMsg.textContent = '⚠️ Browser tidak mendukung kamera.';
+  }
+
+  // GPS
+  function setGps(p) {
+    pos = { lat: p.coords.latitude, lng: p.coords.longitude };
+    gpsInfo.innerHTML = '✅ GPS terkunci: ' + pos.lat.toFixed(5) + ', ' + pos.lng.toFixed(5) +
+      ' (akurasi ±' + Math.round(p.coords.accuracy) + ' m)';
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(setGps, function () {
+      gpsInfo.innerHTML = '⚠️ Lokasi tidak terbaca. Aktifkan GPS & izinkan akses lokasi, lalu muat ulang.';
+    }, { enableHighAccuracy: true, timeout: 15000 });
+    navigator.geolocation.watchPosition(setGps, function () {}, { enableHighAccuracy: true });
+  } else {
+    gpsInfo.innerHTML = '⚠️ Browser tidak mendukung GPS.';
+  }
+
+  // Ambil foto
+  btnFoto.addEventListener('click', function () {
+    if (!video.videoWidth) { alert('Kamera belum siap.'); return; }
+    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+    var ctx = canvas.getContext('2d');
+    ctx.translate(canvas.width, 0); ctx.scale(-1, 1); // mirror seperti preview
+    ctx.drawImage(video, 0, 0);
+    fotoData = canvas.toDataURL('image/jpeg', 0.6);
+    canvas.style.display = 'block'; video.style.visibility = 'hidden';
+    btnFoto.style.display = 'none'; btnUlang.style.display = 'inline-flex';
+  });
+  btnUlang.addEventListener('click', function () {
+    fotoData = '';
+    canvas.style.display = 'none'; video.style.visibility = 'visible';
+    btnFoto.style.display = 'inline-flex'; btnUlang.style.display = 'none';
+  });
+
+  // Submit presensi
+  document.querySelectorAll('.fPresensi').forEach(function (f) {
+    f.addEventListener('submit', function (e) {
+      if (!fotoData) { e.preventDefault(); alert('Ambil foto wajah terlebih dahulu.'); return; }
+      if (!pos) { e.preventDefault(); alert('Lokasi GPS belum terkunci. Tunggu sebentar lalu coba lagi.'); return; }
+      f.querySelector('[name=lat]').value = pos.lat;
+      f.querySelector('[name=lng]').value = pos.lng;
+      f.querySelector('[name=foto]').value = fotoData;
+    });
+  });
+})();
+</script>
+
+<%- include('../partials/footer') %>

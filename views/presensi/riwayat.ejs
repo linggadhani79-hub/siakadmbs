@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Riwayat Presensi Saya</h3><p class="muted"><%= currentUser.nama %></p></div>
+  <div class="filters">
+    <form method="get"><input type="month" name="bulan" value="<%= bulan %>" onchange="this.form.submit()"></form>
+    <a href="/presensi" class="btn btn-sm btn-muted">← Presensi</a>
+  </div>
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>Tanggal</th><th>Masuk</th><th>Pulang</th><th>Status</th><th>Jarak</th><th>Foto</th></tr></thead>
+    <tbody>
+      <% if (riwayat.length===0){ %><tr><td colspan="6" class="empty">Belum ada presensi bulan ini.</td></tr><% } %>
+      <% riwayat.forEach(r => { %>
+        <tr>
+          <td><%= r.tanggal %></td>
+          <td><%= r.jam_masuk || '-' %></td>
+          <td><%= r.jam_pulang || '-' %></td>
+          <td><span class="tag <%= r.status==='Terlambat'?'tag-red':'tag-green' %>"><%= r.status %></span></td>
+          <td><%= r.jarak_masuk != null ? r.jarak_masuk+' m' : '-' %></td>
+          <td class="actions">
+            <a href="/presensi/foto/<%= r.id %>/masuk" target="_blank" class="btn btn-sm btn-outline">Masuk</a>
+            <% if (r.foto_pulang) { %><a href="/presensi/foto/<%= r.id %>/pulang" target="_blank" class="btn btn-sm btn-outline">Pulang</a><% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

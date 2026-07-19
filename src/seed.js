@@ -191,3 +191,12 @@ function seedJadwal() {
   console.log('Seeding jadwal selesai.');
 }
 seedJadwal();
+
+// Seed titik lokasi presensi default (admin dapat mengubahnya)
+function seedLokasiPresensi() {
+  if (count('lokasi_presensi') > 0) return;
+  db.prepare('INSERT INTO lokasi_presensi (nama, lat, lng, radius_m) VALUES (?,?,?,?)')
+    .run('Kampus MBS Poncowati', -4.8672, 105.2621, 300);
+  console.log('Seeding lokasi presensi selesai.');
+}
+seedLokasiPresensi();

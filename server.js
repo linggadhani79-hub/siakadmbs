@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '8mb' })); // limit besar untuk foto presensi (base64)
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
@@ -48,6 +48,7 @@ app.use('/kelas', requireLogin, require('./src/routes/kelas'));
 app.use('/mapel', requireLogin, require('./src/routes/mapel'));
 app.use('/asrama', requireLogin, require('./src/routes/asrama'));
 app.use('/kamar', requireLogin, require('./src/routes/kamar'));
+app.use('/presensi', requireLogin, require('./src/routes/presensi'));
 app.use('/jadwal', requireLogin, require('./src/routes/jadwal'));
 app.use('/absensi', requireLogin, require('./src/routes/absensi'));
 app.use('/jurnal', requireLogin, require('./src/routes/jurnal'));

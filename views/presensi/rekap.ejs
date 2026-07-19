@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Rekap Presensi Staff</h3><p class="muted">Kehadiran seluruh staff per tanggal</p></div>
+  <div class="filters">
+    <form method="get"><input type="date" name="tanggal" value="<%= tanggal %>" onchange="this.form.submit()"></form>
+    <a href="/presensi" class="btn btn-sm btn-muted">← Presensi</a>
+  </div>
+</div>
+
+<div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+  <div class="stat"><div class="ic">✅</div><div><div class="n"><%= rekap.length %></div><div class="l">Sudah Presensi</div></div></div>
+  <div class="stat"><div class="ic">⏰</div><div><div class="n"><%= rekap.filter(r=>r.status==='Terlambat').length %></div><div class="l">Terlambat</div></div></div>
+  <div class="stat"><div class="ic">❌</div><div><div class="n"><%= belum.length %></div><div class="l">Belum Presensi</div></div></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Sudah Presensi — <%= tanggal %></h3></div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>Role</th><th>Masuk</th><th>Pulang</th><th>Status</th><th>Lokasi</th><th>Foto</th></tr></thead>
+      <tbody>
+        <% if (rekap.length===0){ %><tr><td colspan="7" class="empty">Belum ada presensi pada tanggal ini.</td></tr><% } %>
+        <% rekap.forEach(r => { %>
+          <tr>
+            <td><%= r.nama %></td>
+            <td><span class="tag tag-gray"><%= r.role %></span></td>
+            <td><%= r.jam_masuk || '-' %></td>
+            <td><%= r.jam_pulang || '-' %></td>
+            <td><span class="tag <%= r.status==='Terlambat'?'tag-red':'tag-green' %>"><%= r.status %></span></td>
+            <td><%= r.lokasi || '-' %> <span class="muted">(<%= r.jarak_masuk %> m)</span></td>
+            <td class="actions">
+              <a href="/presensi/foto/<%= r.id %>/masuk" target="_blank" class="btn btn-sm btn-outline">👤 Masuk</a>
+              <% if (r.foto_pulang) { %><a href="/presensi/foto/<%= r.id %>/pulang" target="_blank" class="btn btn-sm btn-outline">👤 Pulang</a><% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Belum Presensi (<%= belum.length %>)</h3></div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>Role</th></tr></thead>
+      <tbody>
+        <% if (belum.length===0){ %><tr><td colspan="2" class="empty">Semua staff sudah presensi. 👏</td></tr><% } %>
+        <% belum.forEach(s => { %>
+          <tr><td><%= s.nama %></td><td><span class="tag tag-gray"><%= s.role %></span></td></tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<%- include('../partials/footer') %>

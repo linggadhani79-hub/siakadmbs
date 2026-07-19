@@ -156,6 +156,31 @@ function migrate() {
       guru_id     INTEGER REFERENCES guru(id) ON DELETE SET NULL
     );
 
+    CREATE TABLE IF NOT EXISTS lokasi_presensi (
+      id       INTEGER PRIMARY KEY AUTOINCREMENT,
+      nama     TEXT NOT NULL,
+      lat      REAL NOT NULL,
+      lng      REAL NOT NULL,
+      radius_m INTEGER NOT NULL DEFAULT 300,
+      aktif    INTEGER NOT NULL DEFAULT 1
+    );
+
+    CREATE TABLE IF NOT EXISTS presensi (
+      id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      tanggal      TEXT NOT NULL,
+      jam_masuk    TEXT,
+      jam_pulang   TEXT,
+      lat_masuk    REAL, lng_masuk REAL, jarak_masuk INTEGER,
+      lat_pulang   REAL, lng_pulang REAL, jarak_pulang INTEGER,
+      foto_masuk   TEXT,
+      foto_pulang  TEXT,
+      lokasi_id    INTEGER REFERENCES lokasi_presensi(id) ON DELETE SET NULL,
+      status       TEXT NOT NULL DEFAULT 'Hadir' CHECK(status IN ('Hadir','Terlambat')),
+      created_at   TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+      UNIQUE(user_id, tanggal)
+    );
+
     CREATE TABLE IF NOT EXISTS absensi (
       id          INTEGER PRIMARY KEY AUTOINCREMENT,
       tanggal     TEXT NOT NULL,

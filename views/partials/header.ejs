@@ -27,6 +27,7 @@
       <a href="/tahfidz" class="<%= path.startsWith('/tahfidz') ? 'active' : '' %>"><span class="ic">📖</span><span>Tahfidz Quran</span></a>
       <a href="/kamar" class="<%= path.startsWith('/kamar') ? 'active' : '' %>"><span class="ic">🛏️</span><span>Pembagian Kamar</span></a>
       <% if (role === 'admin' || role === 'guru' || role === 'musyrif') { %>
+        <a href="/presensi" class="<%= path.startsWith('/presensi') ? 'active' : '' %>"><span class="ic">🕒</span><span>Presensi Staff</span></a>
         <a href="/pendaftar" class="<%= path.startsWith('/pendaftar') ? 'active' : '' %>"><span class="ic">📝</span><span>PSB / Pendaftar</span></a>
       <% } %>
     </nav>

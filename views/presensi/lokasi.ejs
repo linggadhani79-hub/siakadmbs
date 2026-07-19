@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Titik Lokasi Presensi</h3><p class="muted">Staff hanya bisa absen dalam radius titik yang aktif</p></div>
+  <a href="/presensi" class="btn btn-sm btn-muted">← Presensi</a>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>+ Tambah Titik Lokasi</h3></div>
+  <div class="card-body">
+    <form method="post" action="/presensi/lokasi">
+      <div class="form-grid">
+        <div class="form-row"><label>Nama Lokasi *</label><input type="text" name="nama" placeholder="mis. Kampus MBS Poncowati" required></div>
+        <div class="form-row"><label>Radius (meter) *</label><input type="number" name="radius_m" value="300" min="20" required></div>
+        <div class="form-row"><label>Latitude *</label><input type="text" name="lat" id="lat" placeholder="-4.8672" required></div>
+        <div class="form-row"><label>Longitude *</label><input type="text" name="lng" id="lng" placeholder="105.2621" required></div>
+      </div>
+      <div class="form-actions" style="flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline" onclick="pakaiLokasiSaya()">📡 Gunakan Lokasi Saya Saat Ini</button>
+        <button class="btn">Simpan Titik</button>
+      </div>
+      <p class="muted" style="margin-top:10px;">💡 Cara termudah: buka halaman ini dari HP <strong>di lokasi sekolah</strong>, lalu tekan "Gunakan Lokasi Saya". Koordinat juga bisa disalin dari Google Maps (klik kanan → salin angka koordinat).</p>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-head"><h3>Daftar Titik (<%= lokasi.length %>)</h3></div>
+  <div class="card-body p0"><div class="table-wrap">
+    <table>
+      <thead><tr><th>Nama</th><th>Koordinat</th><th>Radius</th><th>Status</th><th>Aksi</th></tr></thead>
+      <tbody>
+        <% if (lokasi.length===0){ %><tr><td colspan="5" class="empty">Belum ada titik lokasi.</td></tr><% } %>
+        <% lokasi.forEach(l => { %>
+          <tr>
+            <td><%= l.nama %></td>
+            <td><a href="https://www.google.com/maps?q=<%= l.lat %>,<%= l.lng %>" target="_blank"><%= l.lat %>, <%= l.lng %> 🗺️</a></td>
+            <td><%= l.radius_m %> m</td>
+            <td><%- l.aktif ? '<span class="tag tag-green">Aktif</span>' : '<span class="tag tag-gray">Nonaktif</span>' %></td>
+            <td class="actions">
+              <form method="post" action="/presensi/lokasi/<%= l.id %>/toggle"><button class="btn btn-sm btn-muted"><%= l.aktif ? 'Nonaktifkan' : 'Aktifkan' %></button></form>
+              <form method="post" action="/presensi/lokasi/<%= l.id %>?_method=DELETE" onsubmit="return confirm('Hapus titik lokasi ini?')"><button class="btn btn-sm btn-danger">Hapus</button></form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div></div>
+</div>
+
+<script>
+function pakaiLokasiSaya() {
+  if (!navigator.geolocation) { alert('Browser tidak mendukung GPS.'); return; }
+  navigator.geolocation.getCurrentPosition(function (p) {
+    document.getElementById('lat').value = p.coords.latitude.toFixed(6);
+    document.getElementById('lng').value = p.coords.longitude.toFixed(6);
+  }, function () {
+    alert('Lokasi tidak terbaca. Aktifkan GPS dan izinkan akses lokasi.');
+  }, { enableHighAccuracy: true, timeout: 15000 });
+}
+</script>
+
+<%- include('../partials/footer') %>
