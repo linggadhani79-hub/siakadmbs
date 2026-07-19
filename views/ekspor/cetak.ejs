@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= judul %> · MBS Poncowati</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, "Segoe UI", Roboto, sans-serif; color: #1c2723; padding: 24px; background: #eef2f0; }
+    .toolbar { max-width: 1100px; margin: 0 auto 14px; display: flex; gap: 10px; justify-content: center; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
+    .btn-p { background: #16624a; color: #fff; }
+    .sheet { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,.1); padding: 28px; }
+    .kop { display: flex; align-items: center; gap: 14px; border-bottom: 3px double #16624a; padding-bottom: 14px; margin-bottom: 18px; }
+    .kop .logo { width: 52px; height: 52px; border-radius: 12px; background: linear-gradient(135deg,#1f8a63,#0c3d2c); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 24px; }
+    .kop h1 { font-size: 18px; color: #0c3d2c; }
+    .kop p { font-size: 12px; color: #6b7a74; }
+    h2 { font-size: 16px; color: #0c3d2c; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: #e8f3ee; color: #0c3d2c; text-align: left; padding: 7px 9px; border: 1px solid #cfe0d8; }
+    td { padding: 6px 9px; border: 1px solid #e2e8e4; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafcfb; }
+    .meta { margin-top: 14px; font-size: 11px; color: #6b7a74; text-align: right; }
+    @media print { body { background: #fff; padding: 0; } .toolbar { display: none; } .sheet { box-shadow: none; padding: 0; max-width: 100%; } }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button class="btn btn-p" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+  </div>
+  <div class="sheet">
+    <div class="kop">
+      <div class="logo">M</div>
+      <div>
+        <h1>MBS PONCOWATI — <%= judul %></h1>
+        <p>Pondok Pesantren · SMP &amp; SMA · Poncowati, Terbanggi Besar, Lampung Tengah</p>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>#</th><% cols.forEach(c => { %><th><%= c.replace(/_/g,' ') %></th><% }) %></tr></thead>
+      <tbody>
+        <% if (rows.length === 0) { %><tr><td colspan="<%= cols.length+1 %>" style="text-align:center; color:#6b7a74;">Tidak ada data.</td></tr><% } %>
+        <% rows.forEach((r, i) => { %>
+          <tr><td><%= i+1 %></td><% cols.forEach(c => { %><td><%= r[c] == null ? '' : r[c] %></td><% }) %></tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <div class="meta">Dicetak dari SIAKAD MBS Poncowati · <%= new Date().toLocaleString('id-ID') %> · <%= rows.length %> baris</div>
+  </div>
+</body>
+</html>

@@ -2,7 +2,10 @@
 
 <div class="page-head">
   <div><h3 style="color:var(--green-dark); font-size:18px;">PSB — Pendaftar Santri Baru</h3><p class="muted">Kelola pendaftaran calon santri</p></div>
-  <a href="/psb" target="_blank" class="btn btn-sm btn-outline">🌐 Form Pendaftaran Publik</a>
+  <div class="filters">
+    <%- include('../partials/exportbar', { jenis: 'pendaftar' }) %>
+    <a href="/psb" target="_blank" class="btn btn-sm btn-outline">🌐 Form Publik</a>
+  </div>
 </div>
 
 <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);">

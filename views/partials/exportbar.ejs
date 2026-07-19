@@ -1,0 +1,5 @@
+<a href="/ekspor/<%= jenis %>.csv" class="btn btn-sm btn-outline" title="Unduh CSV (Excel)">⬇️ CSV</a>
+<a href="/ekspor/<%= jenis %>/cetak" target="_blank" class="btn btn-sm btn-outline" title="Cetak / Simpan PDF">🖨️ PDF</a>
+<% if (locals.impor && currentUser.role === 'admin') { %>
+  <a href="/impor/<%= jenis %>" class="btn btn-sm btn-outline" title="Impor dari CSV">⬆️ Impor</a>
+<% } %>

@@ -2,7 +2,10 @@
 
 <div class="page-head">
   <div><h3 style="color:var(--green-dark); font-size:18px;">Kelas / Rombel</h3><p class="muted"><%= kelas.length %> rombongan belajar</p></div>
-  <a href="/kelas/tambah" class="btn btn-sm">+ Tambah</a>
+  <div class="filters">
+    <%- include('../partials/exportbar', { jenis: 'kelas' }) %>
+    <a href="/kelas/tambah" class="btn btn-sm">+ Tambah</a>
+  </div>
 </div>
 
 <div class="card"><div class="card-body p0"><div class="table-wrap">

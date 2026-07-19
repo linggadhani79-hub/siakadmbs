@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Scan Kehadiran Santri</h3><p class="muted">Tempel kartu RFID atau arahkan kartu QR ke kamera — tanpa HP siswa</p></div>
+  <a href="/absensi" class="btn btn-sm btn-outline">📋 Lihat Absensi</a>
+</div>
+
+<div style="display:grid; grid-template-columns: 1fr 1fr; gap:22px;">
+  <div class="card">
+    <div class="card-head"><h3>🎯 Pemindaian</h3></div>
+    <div class="card-body">
+      <div class="form-row">
+        <label>Pembaca Kartu RFID / Ketik ID lalu Enter</label>
+        <input type="text" id="rfid" placeholder="Klik di sini, lalu tempelkan kartu..." autofocus
+               autocomplete="off" style="font-family:monospace; font-size:18px; padding:14px; text-align:center;">
+      </div>
+      <button type="button" id="btnKamera" class="btn btn-outline btn-block" style="margin-bottom:12px;">📷 Aktifkan Kamera QR</button>
+      <div id="wrapKamera" style="display:none; position:relative; border-radius:14px; overflow:hidden; background:#0f1f19; aspect-ratio:4/3;">
+        <video id="video" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+      </div>
+
+      <div id="hasil" style="display:none; margin-top:16px; border-radius:14px; padding:18px; text-align:center;"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h3>🕒 Scan Terakhir Hari Ini</h3></div>
+    <div class="card-body p0">
+      <div class="table-wrap">
+        <table id="tblTerbaru">
+          <thead><tr><th>Jam</th><th>Nama</th><th>Kelas</th><th>Status</th></tr></thead>
+          <tbody>
+            <% if (terbaru.length===0){ %><tr><td colspan="4" class="empty">Belum ada scan hari ini.</td></tr><% } %>
+            <% terbaru.forEach(t => { %>
+              <tr><td><%= t.jam || '-' %></td><td><%= t.nama %></td><td><%= t.kelas || '-' %></td><td><span class="tag tag-green"><%= t.status %></span></td></tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/jsqr.js"></script>
+<script>
+(function () {
+  var rfid = document.getElementById('rfid');
+  var hasil = document.getElementById('hasil');
+  var tbody = document.querySelector('#tblTerbaru tbody');
+  var terakhirKode = '', terakhirWaktu = 0;
+
+  function tampil(ok, judul, sub) {
+    hasil.style.display = 'block';
+    hasil.style.background = ok ? '#e6f6ec' : '#fce8e5';
+    hasil.style.border = '1.5px solid ' + (ok ? '#1c6b3a' : '#b3311f');
+    hasil.style.color = ok ? '#17603a' : '#b3311f';
+    hasil.innerHTML = '<div style="font-size:34px; margin-bottom:6px;">' + (ok ? '✅' : '❌') + '</div>' +
+      '<div style="font-weight:800; font-size:17px;">' + judul + '</div>' +
+      (sub ? '<div style="font-size:13.5px; margin-top:4px;">' + sub + '</div>' : '');
+  }
+
+  function kirim(kode) {
+    kode = (kode || '').trim();
+    if (!kode) return;
+    var kini = Date.now();
+    if (kode === terakhirKode && kini - terakhirWaktu < 4000) return; // anti dobel scan
+    terakhirKode = kode; terakhirWaktu = kini;
+    fetch('/scan/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ kartu: kode }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { tampil(false, 'Kartu tidak dikenal', d.pesan); return; }
+        tampil(true, d.nama, (d.kelas || '-') + ' · ' + (d.sudah ? d.pesan : 'Hadir pukul ' + d.jam));
+        if (!d.sudah) {
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td>' + d.jam + '</td><td>' + d.nama + '</td><td>' + d.kelas + '</td><td><span class="tag tag-green">Hadir</span></td>';
+          var empty = tbody.querySelector('.empty');
+          if (empty) empty.parentNode.remove();
+          tbody.insertBefore(tr, tbody.firstChild);
+        }
+      })
+      .catch(function () { tampil(false, 'Gagal terhubung ke server', 'Periksa koneksi lalu coba lagi.'); });
+  }
+
+  // RFID keyboard-wedge: pembaca mengetik nomor + Enter
+  rfid.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); kirim(rfid.value); rfid.value = ''; }
+  });
+  // Jaga fokus agar selalu siap menerima ketikan pembaca RFID
+  setInterval(function () {
+    if (document.activeElement !== rfid && !kameraAktif) rfid.focus();
+  }, 3000);
+
+  // Kamera QR (jsQR)
+  var kameraAktif = false, stream = null, video = document.getElementById('video');
+  document.getElementById('btnKamera').addEventListener('click', function () {
+    if (kameraAktif) return;
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false })
+      .then(function (s) {
+        stream = s; video.srcObject = s; kameraAktif = true;
+        document.getElementById('wrapKamera').style.display = 'block';
+        this.style.display = 'none';
+        pindai();
+      }.bind(this))
+      .catch(function () { alert('Kamera tidak dapat diakses.'); });
+  });
+
+  var cnv = document.createElement('canvas');
+  function pindai() {
+    if (!kameraAktif) return;
+    if (video.videoWidth) {
+      cnv.width = video.videoWidth; cnv.height = video.videoHeight;
+      var ctx = cnv.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      var img = ctx.getImageData(0, 0, cnv.width, cnv.height);
+      var qr = window.jsQR ? jsQR(img.data, img.width, img.height) : null;
+      if (qr && qr.data) kirim(qr.data);
+    }
+    setTimeout(pindai, 350);
+  }
+})();
+</script>
+
+<%- include('../partials/footer') %>

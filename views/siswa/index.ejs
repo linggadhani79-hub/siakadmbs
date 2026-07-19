@@ -16,6 +16,7 @@
       </select>
       <button class="btn btn-outline btn-sm">Cari</button>
     </form>
+    <%- include('../partials/exportbar', { jenis: 'siswa', impor: true }) %>
     <% if (['admin','guru','musyrif'].includes(currentUser.role)) { %>
       <a href="/siswa/tambah" class="btn btn-sm">+ Tambah</a>
     <% } %>

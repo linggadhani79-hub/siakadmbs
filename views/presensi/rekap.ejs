@@ -4,6 +4,7 @@
   <div><h3 style="color:var(--green-dark); font-size:18px;">Rekap Presensi Staff</h3><p class="muted">Kehadiran seluruh staff per tanggal</p></div>
   <div class="filters">
     <form method="get"><input type="date" name="tanggal" value="<%= tanggal %>" onchange="this.form.submit()"></form>
+    <%- include('../partials/exportbar', { jenis: 'presensi' }) %>
     <a href="/presensi" class="btn btn-sm btn-muted">← Presensi</a>
   </div>
 </div>

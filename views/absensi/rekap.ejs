@@ -11,6 +11,7 @@
       <% } else if (kelasId) { %><input type="hidden" name="kelas_id" value="<%= kelasId %>"><% } %>
       <input type="month" name="bulan" value="<%= bulan %>" onchange="this.form.submit()">
     </form>
+    <%- include('../partials/exportbar', { jenis: 'absensi' }) %>
     <a href="/absensi<%= kelasId ? '?kelas_id='+kelasId : '' %>" class="btn btn-sm btn-muted">← Input Absensi</a>
   </div>
 </div>

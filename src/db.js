@@ -74,6 +74,7 @@ function migrate() {
       no_hp      TEXT,
       kelas_id   INTEGER REFERENCES kelas(id) ON DELETE SET NULL,
       kamar_id   INTEGER REFERENCES kamar(id) ON DELETE SET NULL,
+      kartu_id   TEXT,
       status     TEXT NOT NULL DEFAULT 'Aktif' CHECK(status IN ('Aktif','Alumni','Keluar')),
       created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))
     );
@@ -188,11 +189,18 @@ function migrate() {
       siswa_id    INTEGER NOT NULL REFERENCES siswa(id) ON DELETE CASCADE,
       status      TEXT NOT NULL DEFAULT 'Hadir' CHECK(status IN ('Hadir','Sakit','Izin','Alpa')),
       keterangan  TEXT,
+      jam         TEXT,
       dicatat_oleh TEXT,
       created_at  TEXT NOT NULL DEFAULT (datetime('now','localtime')),
       UNIQUE(tanggal, siswa_id)
     );
   `);
+
+  // Migrasi kolom untuk database lama (abaikan bila kolom sudah ada)
+  const tryExec = (sql) => { try { db.exec(sql); } catch (e) { /* kolom sudah ada */ } };
+  tryExec('ALTER TABLE siswa ADD COLUMN kartu_id TEXT');
+  tryExec('ALTER TABLE absensi ADD COLUMN jam TEXT');
+  db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_siswa_kartu ON siswa(kartu_id) WHERE kartu_id IS NOT NULL');
 }
 
 migrate();

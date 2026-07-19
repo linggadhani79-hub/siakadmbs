@@ -1,0 +1,53 @@
+<%- include('../partials/header') %>
+
+<div class="page-head">
+  <div><h3 style="color:var(--green-dark); font-size:18px;">Kartu Siswa (QR / RFID)</h3><p class="muted">Registrasi ID kartu &amp; cetak kartu ber-QR untuk absen tanpa HP</p></div>
+  <div class="filters">
+    <form method="get">
+      <select name="kelas_id" onchange="this.form.submit()">
+        <option value="">Semua Kelas</option>
+        <% kelas.forEach(k => { %><option value="<%= k.id %>" <%= String(filter.kelas_id)===String(k.id)?'selected':'' %>><%= k.nama %></option><% }) %>
+      </select>
+    </form>
+    <a href="/kartu/cetak<%= filter.kelas_id ? '?kelas_id='+filter.kelas_id : '' %>" target="_blank" class="btn btn-sm btn-outline">🖨️ Cetak Kartu</a>
+    <% if (currentUser.role === 'admin') { %>
+      <form method="post" action="/kartu/generate" onsubmit="return confirm('Generate ID kartu otomatis untuk semua siswa yang belum punya?')">
+        <button class="btn btn-sm">⚡ Generate Otomatis</button>
+      </form>
+    <% } %>
+  </div>
+</div>
+
+<div class="hint" style="margin-bottom:18px;">
+  💡 <strong>Registrasi RFID:</strong> colok pembaca kartu RFID (USB) ke komputer, klik kolom ID kartu siswa, lalu <strong>tempelkan kartunya</strong> — nomor kartu akan terketik otomatis, tekan Simpan. Kartu QR cukup digenerate lalu dicetak.
+</div>
+
+<div class="card"><div class="card-body p0"><div class="table-wrap">
+  <table>
+    <thead><tr><th>NIS</th><th>Nama</th><th>Kelas</th><th>ID Kartu (QR/RFID)</th></tr></thead>
+    <tbody>
+      <% if (siswa.length===0){ %><tr><td colspan="4" class="empty">Tidak ada siswa.</td></tr><% } %>
+      <% siswa.forEach(s => { %>
+        <tr>
+          <td><%= s.nis || '-' %></td>
+          <td><%= s.nama %></td>
+          <td><%= s.kelas || '-' %></td>
+          <td>
+            <% if (currentUser.role === 'admin') { %>
+              <form method="post" action="/kartu/set" style="display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
+                <input type="hidden" name="siswa_id" value="<%= s.id %>">
+                <input type="hidden" name="kelas_id" value="<%= filter.kelas_id || '' %>">
+                <input type="text" name="kartu_id" value="<%= s.kartu_id || '' %>" placeholder="tempel kartu RFID / ketik ID" style="max-width:220px; font-family:monospace;">
+                <button class="btn btn-sm btn-outline">Simpan</button>
+              </form>
+            <% } else { %>
+              <span style="font-family:monospace;"><%= s.kartu_id || '-' %></span>
+            <% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div></div></div>
+
+<%- include('../partials/footer') %>

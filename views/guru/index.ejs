@@ -2,7 +2,10 @@
 
 <div class="page-head">
   <div><h3 style="color:var(--green-dark); font-size:18px;">Guru &amp; Musyrif</h3><p class="muted"><%= guru.length %> pegawai</p></div>
-  <a href="/guru/tambah" class="btn btn-sm">+ Tambah</a>
+  <div class="filters">
+    <%- include('../partials/exportbar', { jenis: 'guru', impor: true }) %>
+    <a href="/guru/tambah" class="btn btn-sm">+ Tambah</a>
+  </div>
 </div>
 
 <div class="card"><div class="card-body p0"><div class="table-wrap">

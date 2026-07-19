@@ -17,6 +17,7 @@
       <% } %>
       <button class="btn btn-outline btn-sm">Filter</button>
     </form>
+    <%- include('../partials/exportbar', { jenis: 'jurnal' }) %>
     <% if (canManage) { %><a href="/jurnal/tambah" class="btn btn-sm">+ Jurnal</a><% } %>
   </div>
 </div>

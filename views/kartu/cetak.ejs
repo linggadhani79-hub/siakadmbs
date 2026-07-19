@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cetak Kartu Siswa · MBS Poncowati</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, "Segoe UI", Roboto, sans-serif; background: #eef2f0; padding: 20px; }
+    .toolbar { text-align: center; margin-bottom: 16px; }
+    .btn { padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; background: #16624a; color: #fff; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, 336px); gap: 14px; justify-content: center; }
+    .kartu {
+      width: 336px; height: 212px; border-radius: 14px; overflow: hidden; position: relative;
+      background: linear-gradient(135deg, #0c3d2c 0%, #16624a 55%, #1f8a63 100%);
+      color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,.18); display: flex; flex-direction: column;
+      break-inside: avoid; page-break-inside: avoid;
+    }
+    .kartu::before { content:""; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); background-size: 16px 16px; }
+    .kh { display: flex; align-items: center; gap: 9px; padding: 12px 14px 8px; position: relative; }
+    .kh .logo { width: 32px; height: 32px; border-radius: 9px; background: #d4af37; color: #2b220a; display: grid; place-items: center; font-weight: 800; font-size: 16px; }
+    .kh b { font-size: 13.5px; letter-spacing: .02em; }
+    .kh small { display: block; font-size: 9.5px; opacity: .85; }
+    .kb { flex: 1; display: flex; align-items: center; gap: 12px; padding: 4px 14px 12px; position: relative; }
+    .qr { background: #fff; border-radius: 10px; padding: 6px; width: 108px; height: 108px; flex-shrink: 0; }
+    .qr img { width: 100%; height: 100%; display: block; }
+    .info { min-width: 0; }
+    .info .nm { font-weight: 800; font-size: 15px; line-height: 1.25; margin-bottom: 4px; }
+    .info .dt { font-size: 11px; opacity: .92; line-height: 1.55; }
+    .info .idk { font-family: monospace; font-size: 11px; background: rgba(255,255,255,.16); padding: 2px 8px; border-radius: 6px; display: inline-block; margin-top: 6px; letter-spacing: .05em; }
+    .kf { background: #d4af37; color: #2b220a; font-size: 9.5px; font-weight: 700; text-align: center; padding: 4px; letter-spacing: .06em; position: relative; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .toolbar { display: none; }
+      .grid { gap: 8mm 6mm; justify-content: flex-start; }
+      .kartu { box-shadow: none; border: 1px solid #ccc; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨️ Cetak / Simpan PDF (<%= kartu.length %> kartu)</button>
+  </div>
+  <div class="grid">
+    <% if (kartu.length === 0) { %>
+      <p style="grid-column:1/-1; text-align:center; color:#6b7a74;">Belum ada siswa dengan ID kartu. Generate dulu di halaman Kartu Siswa.</p>
+    <% } %>
+    <% kartu.forEach(s => { %>
+      <div class="kartu">
+        <div class="kh">
+          <span class="logo">M</span>
+          <div><b>KARTU SANTRI · MBS PONCOWATI</b><small>Pondok Pesantren · SMP &amp; SMA</small></div>
+        </div>
+        <div class="kb">
+          <div class="qr"><img src="<%= s.qr %>" alt="QR"></div>
+          <div class="info">
+            <div class="nm"><%= s.nama %></div>
+            <div class="dt">
+              NIS: <%= s.nis || '-' %><br>
+              Kelas: <%= s.kelas || '-' %> (<%= s.jenjang || '-' %>)
+            </div>
+            <span class="idk"><%= s.kartu_id %></span>
+          </div>
+        </div>
+        <div class="kf">SCAN KARTU INI UNTUK PRESENSI KEHADIRAN</div>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="card" style="max-width:780px;">
+  <div class="card-head"><h3>⬆️ <%= title %> dari CSV</h3></div>
+  <div class="card-body">
+    <p class="muted" style="margin-bottom:14px;">
+      Pilih file CSV (bisa diekspor dari Excel: <em>Save As → CSV</em>) atau tempel isinya langsung.
+      Baris pertama harus berisi nama kolom.
+    </p>
+    <div class="hint" style="margin-bottom:16px;">
+      <strong>Format kolom yang dikenali:</strong>
+      <pre style="white-space:pre-wrap; font-size:12px; margin-top:6px;"><%= contoh %></pre>
+    </div>
+    <form method="post" action="/impor/<%= jenis %>">
+      <div class="form-row">
+        <label>Pilih File CSV</label>
+        <input type="file" id="fileCsv" accept=".csv,text/csv">
+      </div>
+      <div class="form-row">
+        <label>Atau tempel isi CSV di sini</label>
+        <textarea name="csv" id="csvText" style="min-height:180px; font-family:monospace; font-size:13px;" required></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn">Impor Sekarang</button>
+        <a href="/<%= jenis %>" class="btn btn-muted">Batal</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+document.getElementById('fileCsv').addEventListener('change', function () {
+  var f = this.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () { document.getElementById('csvText').value = r.result; };
+  r.readAsText(f);
+});
+</script>
+
+<%- include('../partials/footer') %>

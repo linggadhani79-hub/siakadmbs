@@ -4,6 +4,7 @@
   <div><h3 style="color:var(--green-dark); font-size:18px;">Manajemen Tahfidz Al-Quran</h3><p class="muted">Pencatatan setoran hafalan santri</p></div>
   <div class="filters">
     <a href="/tahfidz/rekap" class="btn btn-sm btn-outline">📊 Rekap Capaian</a>
+    <% if (canManage) { %><%- include('../partials/exportbar', { jenis: 'tahfidz' }) %><% } %>
     <% if (canManage) { %><a href="/tahfidz/tambah" class="btn btn-sm">+ Setoran</a><% } %>
   </div>
 </div>
